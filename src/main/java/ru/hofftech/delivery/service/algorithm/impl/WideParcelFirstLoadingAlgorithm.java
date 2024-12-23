@@ -1,8 +1,6 @@
 package ru.hofftech.delivery.service.algorithm.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.hofftech.delivery.exception.InvalidAttemptToPutParcelIntoTruckException;
-import ru.hofftech.delivery.exception.TruckMatrixPositionOutOfRangeException;
 import ru.hofftech.delivery.model.entity.MatrixPosition;
 import ru.hofftech.delivery.service.algorithm.ParcelLoadingAlgorithm;
 import ru.hofftech.delivery.model.entity.Parcel;
@@ -14,8 +12,7 @@ import java.util.List;
 
 @Slf4j
 public class WideParcelFirstLoadingAlgorithm implements ParcelLoadingAlgorithm {
-
-    private final int NEXT_TRUCK_NUMBER_INCREMENT = 1;
+    private static final Integer NEXT_TRUCK_NUMBER_INCREMENT = 1;
 
     @Override
     public List<Truck> loadTrucks(List<Parcel> parcels) {
@@ -31,36 +28,52 @@ public class WideParcelFirstLoadingAlgorithm implements ParcelLoadingAlgorithm {
 
     private void putParcelIntoAnySuitableTruck(Parcel parcel, List<Truck> trucks) {
         for (var truck : trucks) {
-            try {
-                putParcelIntoTruck(parcel, truck);
+            if (putParcelIntoTruck(parcel, truck)) {
                 return;
-            } catch (InvalidAttemptToPutParcelIntoTruckException | TruckMatrixPositionOutOfRangeException exception) {
-                logPlacementErrorWarning(truck.getNumber(), parcel.getNumber());
+            } else {
+                log.warn(
+                        "Can't place parcel #{} into a truck #{}.",
+                        parcel.getNumber(),
+                        truck.getNumber());
             }
         }
 
-        var truck = createTruck(trucks.size() + NEXT_TRUCK_NUMBER_INCREMENT);
+        var newTruckNumber = trucks.size() + NEXT_TRUCK_NUMBER_INCREMENT;
+        log.info("Creating new truck #{}", newTruckNumber);
+        var truck = new Truck(newTruckNumber);
         putParcelIntoTruck(parcel, truck);
         trucks.add(truck);
     }
 
-    private void putParcelIntoTruck(Parcel parcel, Truck truck) {
-        validateTruckAvailableVolumeForParcel(truck, parcel);
+    private boolean putParcelIntoTruck(Parcel parcel, Truck truck) {
+        if (!isTruckAvailableVolumeForParcel(truck, parcel)) {
+            return false;
+        }
 
         var availablePositionForParcel = findAvailablePositionForParcel(truck, parcel);
+        if (availablePositionForParcel == null) {
+            return false;
+        }
         truck.putParcel(availablePositionForParcel, parcel);
-        logParcelSuccessfullyPlaced(truck.getNumber(), parcel.getNumber(), availablePositionForParcel);
+        log.info(
+                "Truck #{}: parcel #{} placed at [{}:{}].",
+                truck.getNumber(),
+                parcel.getNumber(),
+                availablePositionForParcel.getRowNumber(),
+                availablePositionForParcel.getColumnNumber());
+        return true;
     }
 
     private MatrixPosition findAvailablePositionForParcel(Truck truck, Parcel parcel) {
         var placementPosition = truck.findNearestAvailablePosition(new MatrixPosition());
 
         while (placementPosition != null) {
+            placementPosition = updatePlacementPositionConsideringNeededWidth(truck, parcel, placementPosition);
+
             if (!truck.isTruckHeightAvailable(placementPosition, parcel.getParcelHeight())) {
-                throw new InvalidAttemptToPutParcelIntoTruckException();
+                return null;
             }
 
-            placementPosition = updatePlacementPositionConsideringNeededWidth(truck, parcel, placementPosition);
             if (truck.canPutParcel(placementPosition, parcel)) {
                 return placementPosition;
             }
@@ -68,7 +81,7 @@ public class WideParcelFirstLoadingAlgorithm implements ParcelLoadingAlgorithm {
             placementPosition = truck.findNearestAvailablePosition(truck.findNextPosition(placementPosition));
         }
 
-        throw new TruckMatrixPositionOutOfRangeException();
+        return null;
     }
 
     private MatrixPosition updatePlacementPositionConsideringNeededWidth(Truck truck, Parcel parcel, MatrixPosition currentPosition) {
@@ -78,34 +91,7 @@ public class WideParcelFirstLoadingAlgorithm implements ParcelLoadingAlgorithm {
         return currentPosition;
     }
 
-    private void validateTruckAvailableVolumeForParcel(Truck truck, Parcel parcel) {
-        if (truck.getAvailableVolume() < parcel.getParcelVolume()) {
-            throw new InvalidAttemptToPutParcelIntoTruckException();
-        }
-    }
-
-    private Truck createTruck(int truckNumber) {
-        logNewTruckCreation(truckNumber);
-        return new Truck(truckNumber);
-    }
-
-    private void logPlacementErrorWarning(int truckNumber, int parcelNumber) {
-        log.warn(
-                "Can't place parcel #{} into a truck #{}.",
-                parcelNumber,
-                truckNumber);
-    }
-
-    private void logParcelSuccessfullyPlaced(int truckNumber, int parcelNumber, MatrixPosition placementPosition) {
-        log.info(
-                "Truck #{}: parcel #{} placed at [{}:{}].",
-                truckNumber,
-                parcelNumber,
-                placementPosition.getRowNumber(),
-                placementPosition.getColumnNumber());
-    }
-
-    private void logNewTruckCreation(int truckNumber) {
-        log.info("Creating new truck #{}", truckNumber);
+    private boolean isTruckAvailableVolumeForParcel(Truck truck, Parcel parcel) {
+        return truck.getAvailableVolume() >= parcel.getParcelVolume();
     }
 }

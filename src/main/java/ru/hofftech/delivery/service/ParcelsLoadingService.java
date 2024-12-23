@@ -13,7 +13,6 @@ public class ParcelsLoadingService {
     private final PackageLoadingAlgorithmFactory packageLoadingAlgorithmFactory;
 
     public List<Truck> loadTrucks(List<Parcel> parcels, LoadingAlgorithm loadingAlgorithm) {
-
         return packageLoadingAlgorithmFactory.getTruckLoader(loadingAlgorithm)
                 .loadTrucks(parcels);
     }

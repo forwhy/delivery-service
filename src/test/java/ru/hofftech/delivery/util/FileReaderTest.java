@@ -10,14 +10,12 @@ public class FileReaderTest {
 
     @Test
     public void readAllLines_fileNotExist_throwsException() {
-
         assertThatThrownBy(() -> new FileReader().readAllLines("test_parcels_not_exists.txt"))
                 .isInstanceOf(InvalidFilePathException.class);
     }
 
     @Test
     public void readAllLines_fileExists_lineListNotEmpty() {
-
         var fileLines = new FileReader().readAllLines("test_parcels.txt");
         assertThat(fileLines).isNotEmpty();
     }

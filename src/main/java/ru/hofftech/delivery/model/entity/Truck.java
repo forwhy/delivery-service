@@ -4,28 +4,30 @@ import lombok.Getter;
 import ru.hofftech.delivery.exception.TruckMatrixPositionOutOfRangeException;
 
 import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Truck {
-    private static final int START_ROW_NUMBER = 0;
-    private static final int START_COLUMN_NUMBER = 0;
+    private static final Integer START_ROW_NUMBER = 0;
+    private static final Integer START_COLUMN_NUMBER = 0;
     private static final Character EMPTY_POSITION = ' ';
-    private static final int INDEX_OFFSET = 1;
-    private static final int FOUNDATION_COEFFICIENT = 2;
+    private static final Integer INDEX_OFFSET = 1;
+    private static final Integer FOUNDATION_COEFFICIENT = 2;
 
     @Getter
-    private final int width = 6;
+    private final Integer width = 6;
     @Getter
-    private final int height = 6;
+    private final Integer height = 6;
     @Getter
-    private int number;
+    private final Integer number;
     @Getter
-    private int availableVolume;
-    private char[][] truckMatrix;
+    private Integer availableVolume;
+    private final Character[][] truckMatrix;
 
-    public Truck(int number) {
+    public Truck(Integer number) {
         this.number = number;
         this.availableVolume = width * height;
-        this.truckMatrix = new char[height][width];
+        this.truckMatrix = new Character[height][width];
 
         initializeEmptyTruck();
     }
@@ -45,46 +47,25 @@ public class Truck {
         return nextPosition;
     }
 
-    /**
-     * Определяет следующую допустимую ячейку в грузовике.
-     * Возвращает соседнюю ячейку в той же строке, либо первую ячейку следующей строки,
-     * если текущая строка закончилась.
-     * @param currentPosition Текущая выбранная ячейка грузовика.
-     * @return Следующая допустимая ячейка грузовика.
-     */
     public MatrixPosition findNextPosition(MatrixPosition currentPosition) {
-        validateCurrentPositionIsNotLastAvailable(currentPosition);
-        return currentPosition.getColumnNumber() == getTruckMaxColumnNumber()
+        if (isCurrentPositionLastAvailable(currentPosition)) {
+            return null;
+        }
+        return currentPosition.getColumnNumber().equals(getTruckMaxColumnNumber())
                 ? new MatrixPosition(currentPosition.getNextRowNumber(), MatrixPosition.DEFAULT_START_COLUMN)
                 : new MatrixPosition(currentPosition.getRowNumber(), currentPosition.getNextColumnNumber());
     }
 
-    public boolean isFoundationWidthEnoughForParcel(MatrixPosition parcelStartPosition, int parcelWidth) {
-        if (parcelStartPosition.getRowNumber() == START_ROW_NUMBER) {
-            return true;
-        }
-
-        var foundationRow = parcelStartPosition.getPreviousRowNumber();
-        var foundationWidth = countNonEmptyPositionsAtRow(foundationRow,
-                parcelStartPosition.getColumnNumber(),
-                parcelStartPosition.getColumnNumber() + parcelWidth);
-
-        return parcelWidth < foundationWidth * FOUNDATION_COEFFICIENT;
-    }
-
-    public boolean isTruckHeightAvailable(MatrixPosition startPosition, int neededHeight) {
+    public boolean isTruckHeightAvailable(MatrixPosition startPosition, Integer neededHeight) {
         return height - startPosition.getRowNumber() >= neededHeight;
     }
 
-    public boolean isTruckWidthAvailable(MatrixPosition startPosition, int neededWidth) {
+    public boolean isTruckWidthAvailable(MatrixPosition startPosition, Integer neededWidth) {
         return width - startPosition.getColumnNumber() >= neededWidth;
     }
 
     public boolean canPutParcel(MatrixPosition point, Parcel parcel) {
-
-        return isTruckHeightAvailable(point, parcel.getParcelHeight())
-                && isTruckWidthAvailable(point, parcel.getParcelWidth())
-                && isFoundationWidthEnoughForParcel(point, parcel.getParcelWidth())
+        return  isFoundationWidthEnoughForParcel(point, parcel.getParcelWidth())
                 && isSpaceForParcelAvailable(point, parcel);
     }
 
@@ -102,23 +83,21 @@ public class Truck {
         availableVolume -= parcel.getParcelVolume();
     }
 
-    private void putParcelRowIntoTruckRow(char[] parcelRow, int truckRowNumber, int truckColumnOffset) {
-        for (int elementNumber = START_COLUMN_NUMBER; elementNumber < parcelRow.length; elementNumber++) {
-            truckMatrix[truckRowNumber][elementNumber + truckColumnOffset] = parcelRow[elementNumber];
-        }
-    }
-
     public String toString() {
         var output = new StringBuilder();
-        var delimiter = '+';
+        char delimiter = '+';
 
         for (int row = getTruckMaxRowNumber(); row >= START_ROW_NUMBER; row--) {
-            output.append(String.format("%s%s%s\n", delimiter, String.valueOf(truckMatrix[row]), delimiter));
+            output.append(String.format(
+                    "%s%s%s%n",
+                    delimiter,
+                    Arrays.stream(truckMatrix[row]).map(String::valueOf).collect(Collectors.joining()),
+                    delimiter));
         }
 
         var formatLine = new char[width];
         Arrays.fill(formatLine, delimiter);
-        output.append(String.format("%s%s%s\n", delimiter, String.valueOf(formatLine), delimiter));
+        output.append(String.format("%s%s%s%n", delimiter, String.valueOf(formatLine), delimiter));
 
         return output.toString();
     }
@@ -141,14 +120,28 @@ public class Truck {
         return height >= parcel.getParcelHeight();
     }
 
-    private void validateCurrentPositionIsNotLastAvailable(MatrixPosition currentPosition) {
-        if (currentPosition.getColumnNumber() == getTruckMaxColumnNumber()
-            && currentPosition.getRowNumber() == getTruckMaxRowNumber()) {
-                throw new TruckMatrixPositionOutOfRangeException();
-            }
+    private void putParcelRowIntoTruckRow(Character[] parcelRow, Integer truckRowNumber, Integer truckColumnOffset) {
+        System.arraycopy(parcelRow, START_COLUMN_NUMBER, truckMatrix[truckRowNumber], START_COLUMN_NUMBER + truckColumnOffset, parcelRow.length);
     }
 
-    private int countNonEmptyPositionsAtRow(int rowNumber, int startPosition, int endPosition) {
+    private boolean isFoundationWidthEnoughForParcel(MatrixPosition parcelStartPosition, Integer parcelWidth) {
+        if (parcelStartPosition.getRowNumber().equals(START_ROW_NUMBER)) {
+            return true;
+        }
+
+        var foundationRow = parcelStartPosition.getPreviousRowNumber();
+        var foundationWidth = countNonEmptyPositionsAtRow(foundationRow,
+                parcelStartPosition.getColumnNumber(),
+                parcelStartPosition.getColumnNumber() + parcelWidth);
+        return parcelWidth < foundationWidth * FOUNDATION_COEFFICIENT;
+    }
+
+    private boolean isCurrentPositionLastAvailable(MatrixPosition currentPosition) {
+        return currentPosition.getColumnNumber().equals(getTruckMaxColumnNumber())
+                && currentPosition.getRowNumber().equals(getTruckMaxRowNumber());
+    }
+
+    private Integer countNonEmptyPositionsAtRow(Integer rowNumber, Integer startPosition, Integer endPosition) {
         var count = 0;
         for (int columnNumber = startPosition; columnNumber < endPosition; columnNumber++) {
             if (truckMatrix[rowNumber][columnNumber] != EMPTY_POSITION) {
@@ -173,8 +166,7 @@ public class Truck {
         return true;
     }
 
-    private boolean isTruckRowSpaceForParcelRowAvailable(char[] truckRow, char[] parcelRow, int columnOffset) {
-
+    private boolean isTruckRowSpaceForParcelRowAvailable(Character[] truckRow, Character[] parcelRow, Integer columnOffset) {
         for (int elementNumber = START_COLUMN_NUMBER; elementNumber < parcelRow.length; elementNumber++) {
             if (truckRow[elementNumber + columnOffset] != EMPTY_POSITION && parcelRow[elementNumber] != EMPTY_POSITION) {
                 return false;
@@ -183,11 +175,11 @@ public class Truck {
         return true;
     }
 
-    private int getTruckMaxRowNumber() {
+    private Integer getTruckMaxRowNumber() {
         return height - INDEX_OFFSET;
     }
 
-    private int getTruckMaxColumnNumber() {
+    private Integer getTruckMaxColumnNumber() {
         return width - INDEX_OFFSET;
     }
 }

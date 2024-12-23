@@ -2,7 +2,7 @@ package ru.hofftech.delivery.exception;
 
 public class InvalidAlgorithmException extends RuntimeException {
 
-    public InvalidAlgorithmException() {
-        super("Invalid algorithm was chosen");
+    public InvalidAlgorithmException(Integer algorithm) {
+        super("Invalid algorithm was chosen: %d".formatted(algorithm));
     }
 }

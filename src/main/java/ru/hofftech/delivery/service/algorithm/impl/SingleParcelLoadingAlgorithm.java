@@ -12,45 +12,34 @@ import java.util.List;
 
 @Slf4j
 public class SingleParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
-    private final int PARCEL_START_ROW_NUMBER = 0;
-    private final int PARCEL_START_COLUMN_NUMBER = 0;
+    private static final Integer PARCEL_START_ROW_NUMBER = 0;
+    private static final Integer PARCEL_START_COLUMN_NUMBER = 0;
 
     @Override
     public List<Truck> loadTrucks(List<Parcel> parcels) {
         var trucks = new ArrayList<Truck>();
 
         for (var parcel : parcels) {
-                trucks.add(getLoadedTruck(parcel, parcel.getNumber()));
+                trucks.add(loadNewTruck(parcel, parcel.getNumber()));
         }
-
         return trucks;
     }
 
-    /**
-     * Грузит посылку в грузовик.
-     *
-     * @param parcel Посылка для погрузки.
-     * @param truckNumber Порядковый номер грузовика.
-     * @return Грузовик с посылкой.
-     */
-    private Truck getLoadedTruck(Parcel parcel, int truckNumber) {
+    private Truck loadNewTruck(Parcel parcel, Integer truckNumber) {
         var truck = new Truck(truckNumber);
         log.info("Truck #{} created.", parcel.getNumber());
 
         validateTruckCapacityEnoughForParcel(truck, parcel);
-        loadTruck(truck, parcel);
-
-        return truck;
+        return putParcelIntoTruck(truck, parcel);
     }
 
     private void validateTruckCapacityEnoughForParcel(Truck truck, Parcel parcel) {
         if (!truck.isEmptyTruckCapacityEnoughForParcel(parcel)) {
-            logPlacementError(parcel, truck);
             throw new InvalidAttemptToPutParcelIntoTruckException();
         }
     }
 
-    private void loadTruck(Truck truck, Parcel parcel) {
+    private Truck putParcelIntoTruck(Truck truck, Parcel parcel) {
         var parcelsPosition = new MatrixPosition(PARCEL_START_ROW_NUMBER, PARCEL_START_COLUMN_NUMBER);
 
         if (truck.canPutParcel(parcelsPosition, parcel)) {
@@ -62,17 +51,8 @@ public class SingleParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
                     PARCEL_START_ROW_NUMBER,
                     PARCEL_START_COLUMN_NUMBER);
         } else {
-            logPlacementError(parcel, truck);
             throw new IllegalArgumentException("Can't place parcel into a truck");
         }
-    }
-
-    private void logPlacementError(Parcel parcel, Truck truck) {
-        log.error(
-                "Can't place parcel with size {}x{} into a truck with size {}x{}.",
-                parcel.getParcelWidth(),
-                parcel.getParcelHeight(),
-                truck.getWidth(),
-                truck.getHeight());
+        return truck;
     }
 }

@@ -1,63 +1,54 @@
 package ru.hofftech.delivery.model.entity;
 
 import lombok.Getter;
+import ru.hofftech.delivery.exception.InvalidParcelException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 public class Parcel {
-    private static final int INDEX_OFFSET = 1;
-    private static final int START_ROW_INDEX = 0;
-    private static final char EMPTY_SPACE = ' ';
-    private final int volume;
+    private static final Integer INDEX_OFFSET = 1;
+    private static final Integer START_ROW_INDEX = 0;
+    private static final Integer START_COLUMN_INDEX = 0;
+    private final Integer volume;
     @Getter
-    private final ArrayList<char[]> parcelMatrix;
+    private final List<Character[]> parcelMatrix;
     @Getter
-    private final int number;
+    private final Integer number;
 
-    public Parcel(ArrayList<char[]> matrix) {
+    public Parcel(List<Character[]> matrix, Integer number) {
         this.parcelMatrix = matrix;
-        this.volume = Character.getNumericValue(matrix.getFirst()[0]);
-        this.number = 0;
-    }
-
-    public Parcel(ArrayList<char[]> matrix, int number) {
-        this.parcelMatrix = matrix;
-        this.volume = Character.getNumericValue(matrix.getFirst()[0]);
+        this.volume = Character.getNumericValue(matrix.getFirst()[START_COLUMN_INDEX]);
         this.number = number;
     }
 
-    public int getParcelWidth() {
+    public Integer getParcelWidth() {
         return parcelMatrix
                 .stream()
                 .max(Comparator.comparingInt(row -> row.length))
-                .get()
+                .orElseThrow()
                 .length;
     }
 
-    public int getParcelHeight() {
+    public Integer getParcelHeight() {
         return parcelMatrix.size();
     }
 
-    public char getParcelMatrixElement(MatrixPosition point) {
-        var line = this.parcelMatrix.get(point.getRowNumber());
-
-        return line.length <= point.getColumnNumber() ? EMPTY_SPACE : line[point.getColumnNumber()];
-    }
-
-    public int getParcelVolume() {
+    public Integer getParcelVolume() {
         return volume;
     }
 
-    public char[] getParcelRowMatrix(int rowNumber) {
+    public Character[] getParcelRowMatrix(Integer rowNumber) {
         return parcelMatrix.get(rowNumber);
     }
 
     public String toString() {
         var output = new StringBuilder();
 
-        for (int i = this.parcelMatrix.size() - INDEX_OFFSET; i >= START_ROW_INDEX; i--) {
-            output.append(String.format("%s\n", String.valueOf(this.parcelMatrix.get(i))));
+        for (int i = parcelMatrix.size() - INDEX_OFFSET; i >= START_ROW_INDEX; i--) {
+            output.append(String.format("%s%n", Arrays.toString(this.parcelMatrix.get(i))));
         }
 
         return output.toString();
