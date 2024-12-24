@@ -14,6 +14,7 @@ public class LoadingAlgorithmMapper {
         return switch (algorithmNumber) {
             case 1 -> LoadingAlgorithm.ONE_TRUCK_PER_PARCEL;
             case 2 -> LoadingAlgorithm.WIDE_FIRST;
+            case 3 -> LoadingAlgorithm.BALANCED;
             default -> throw new InvalidAlgorithmException(algorithmNumber);
         };
     }

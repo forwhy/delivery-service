@@ -7,23 +7,30 @@ import ru.hofftech.delivery.enums.mapper.LoadingAlgorithmMapper;
 import java.util.Scanner;
 
 @RequiredArgsConstructor
-public class ConsoleReaderService {
+public class ParcelParameterReaderService {
     private final Scanner scanner;
     private final LoadingAlgorithmMapper loadingAlgorithmMapper;
 
-    public String getFilePath() {
-        System.out.println("Enter path to a file with parcels:\n");
+    public String readFilePath() {
+        System.out.println("Enter path to a file with parcels:");
         return scanner.nextLine();
     }
 
-    public LoadingAlgorithm getLoadingAlgorithm() {
+    public LoadingAlgorithm readLoadingAlgorithm() {
         System.out.printf(
-                "Enter placement strategy to use: %d - %s, %d - %s\n%n",
+                "Enter placement strategy to use: %d - %s, %d - %s, %d - %s%n",
                 LoadingAlgorithm.ONE_TRUCK_PER_PARCEL.getAlgorithmNumber(),
                 LoadingAlgorithm.ONE_TRUCK_PER_PARCEL.name(),
                 LoadingAlgorithm.WIDE_FIRST.getAlgorithmNumber(),
-                LoadingAlgorithm.WIDE_FIRST.name());
+                LoadingAlgorithm.WIDE_FIRST.name(),
+                LoadingAlgorithm.BALANCED.getAlgorithmNumber(),
+                LoadingAlgorithm.BALANCED.name());
 
         return loadingAlgorithmMapper.mapIntToLoadingAlgorithm(scanner.nextInt());
+    }
+
+    public Integer readTrucksCountLimit() {
+        System.out.println("Enter trucks count limit:");
+        return scanner.nextInt();
     }
 }
