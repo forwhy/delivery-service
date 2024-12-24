@@ -1,10 +1,11 @@
 package ru.hofftech.delivery.model.entity;
 
 import lombok.Getter;
-import ru.hofftech.delivery.exception.TruckMatrixPositionOutOfRangeException;
+import ru.hofftech.delivery.model.dto.PlacedParcelDto;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Truck {
@@ -22,12 +23,15 @@ public class Truck {
     private final Integer number;
     @Getter
     private Integer availableVolume;
+    @Getter
+    private List<PlacedParcelDto> placedParcels;
     private final Character[][] truckMatrix;
 
     public Truck(Integer number) {
         this.number = number;
         this.availableVolume = width * height;
         this.truckMatrix = new Character[height][width];
+        placedParcels = new ArrayList<>();
 
         initializeEmptyTruck();
     }
@@ -65,22 +69,23 @@ public class Truck {
     }
 
     public boolean canPutParcel(MatrixPosition point, Parcel parcel) {
-        return  isFoundationWidthEnoughForParcel(point, parcel.getParcelWidth())
+        return  isFoundationWidthEnoughForParcel(point, parcel.getWidth())
                 && isSpaceForParcelAvailable(point, parcel);
     }
 
     public void putParcel(MatrixPosition startPosition, Parcel parcel) {
         var startRow = startPosition.getRowNumber();
-        var endRow = startPosition.getRowNumber() + parcel.getParcelHeight();
+        var endRow = startPosition.getRowNumber() + parcel.getHeight();
 
         for (int row = startRow; row < endRow; row++) {
             putParcelRowIntoTruckRow(
-                    parcel.getParcelRowMatrix(row - startRow),
+                    parcel.getRowMatrix(row - startRow),
                     row,
                     startPosition.getColumnNumber());
         }
 
-        availableVolume -= parcel.getParcelVolume();
+        placedParcels.add(new PlacedParcelDto(parcel.getVolume(), parcel.getNumber(), startPosition.getRowNumber(), startPosition.getColumnNumber()));
+        availableVolume -= parcel.getVolume();
     }
 
     public String toString() {
@@ -109,15 +114,15 @@ public class Truck {
     }
 
     private boolean isEmptyTruckVolumeEnough(Parcel parcel) {
-        return availableVolume >= parcel.getParcelVolume();
+        return availableVolume >= parcel.getVolume();
     }
 
     private boolean isEmptyTruckWidthEnough(Parcel parcel) {
-        return width >= parcel.getParcelWidth();
+        return width >= parcel.getWidth();
     }
 
     private boolean isEmptyTruckHeightEnough(Parcel parcel) {
-        return height >= parcel.getParcelHeight();
+        return height >= parcel.getHeight();
     }
 
     private void putParcelRowIntoTruckRow(Character[] parcelRow, Integer truckRowNumber, Integer truckColumnOffset) {
@@ -153,12 +158,12 @@ public class Truck {
 
     private boolean isSpaceForParcelAvailable(MatrixPosition startPosition, Parcel parcel) {
         var startRow = startPosition.getRowNumber();
-        var endRow = startPosition.getRowNumber() + parcel.getParcelHeight();
+        var endRow = startPosition.getRowNumber() + parcel.getHeight();
 
         for (int row = startRow; row < endRow; row++) {
             if (!isTruckRowSpaceForParcelRowAvailable(
                     truckMatrix[row],
-                    parcel.getParcelRowMatrix(row - startRow),
+                    parcel.getRowMatrix(row - startRow),
                     startPosition.getColumnNumber())) {
                 return false;
             }

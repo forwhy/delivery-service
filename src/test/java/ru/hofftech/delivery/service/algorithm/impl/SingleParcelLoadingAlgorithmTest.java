@@ -25,7 +25,7 @@ class SingleParcelLoadingAlgorithmTest {
                 new Character[] {'6', '6', '6'},
                 new Character[] {'6', '6', '6'})), 3));
 
-        List<Truck> loadedTrucks = new SingleParcelLoadingAlgorithm().loadTrucks(parcels);
+        List<Truck> loadedTrucks = new SingleParcelLoadingAlgorithm().loadTrucks(parcels, );
 
         assertThat(loadedTrucks.size()).isEqualTo(3);
     }
@@ -37,7 +37,7 @@ class SingleParcelLoadingAlgorithmTest {
                 new Character[] {'6', '6', '6'},
                 new Character[] {'6', '6', '6'})), 1));
 
-        List<Truck> loadedTrucks = new SingleParcelLoadingAlgorithm().loadTrucks(parcels);
+        List<Truck> loadedTrucks = new SingleParcelLoadingAlgorithm().loadTrucks(parcels, );
 
         assertThat(loadedTrucks.size()).isEqualTo(1);
     }

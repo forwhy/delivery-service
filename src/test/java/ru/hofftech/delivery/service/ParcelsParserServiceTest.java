@@ -1,6 +1,5 @@
 package ru.hofftech.delivery.service;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import ru.hofftech.delivery.exception.InvalidParcelException;
@@ -53,8 +52,8 @@ class ParcelsParserServiceTest {
 
         assertThat(parcels.size()).isEqualTo(1);
         assertThat(parcels.getFirst().getNumber()).isEqualTo(1);
-        assertThat(parcels.getFirst().getParcelVolume()).isEqualTo(2);
-        assertThat(parcels.getFirst().getParcelHeight()).isEqualTo(1);
-        assertThat(parcels.getFirst().getParcelWidth()).isEqualTo(2);
+        assertThat(parcels.getFirst().getVolume()).isEqualTo(2);
+        assertThat(parcels.getFirst().getHeight()).isEqualTo(1);
+        assertThat(parcels.getFirst().getWidth()).isEqualTo(2);
     }
 }

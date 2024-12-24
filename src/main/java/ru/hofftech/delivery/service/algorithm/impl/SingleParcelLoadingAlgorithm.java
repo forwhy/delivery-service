@@ -2,6 +2,7 @@ package ru.hofftech.delivery.service.algorithm.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.hofftech.delivery.exception.InvalidAttemptToPutParcelIntoTruckException;
+import ru.hofftech.delivery.exception.TrucksOverflowException;
 import ru.hofftech.delivery.service.algorithm.ParcelLoadingAlgorithm;
 import ru.hofftech.delivery.model.entity.MatrixPosition;
 import ru.hofftech.delivery.model.entity.Parcel;
@@ -16,9 +17,10 @@ public class SingleParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
     private static final Integer PARCEL_START_COLUMN_NUMBER = 0;
 
     @Override
-    public List<Truck> loadTrucks(List<Parcel> parcels) {
-        var trucks = new ArrayList<Truck>();
+    public List<Truck> loadTrucks(List<Parcel> parcels, Integer trucksCountLimit) {
+        validateTrucksCountLimit(trucksCountLimit, parcels.size());
 
+        var trucks = new ArrayList<Truck>();
         for (var parcel : parcels) {
                 trucks.add(loadNewTruck(parcel, parcel.getNumber()));
         }

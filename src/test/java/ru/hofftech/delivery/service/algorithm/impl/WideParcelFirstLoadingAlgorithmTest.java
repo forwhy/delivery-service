@@ -27,7 +27,7 @@ class WideParcelFirstLoadingAlgorithmTest {
         parcels.add(new Parcel(new ArrayList<>() {{ add(new Character[]{'1'}); }}, 11));
         parcels.add(new Parcel(new ArrayList<>() {{ add(new Character[]{'1'}); }}, 12));
 
-        List<Truck> loadedTrucks = new WideParcelFirstLoadingAlgorithm().loadTrucks(parcels);
+        List<Truck> loadedTrucks = new WideParcelFirstLoadingAlgorithm().loadTrucks(parcels, );
 
         assertThat(loadedTrucks.size()).isEqualTo(1);
         assertThat(loadedTrucks.getFirst().getAvailableVolume()).isEqualTo(0);
@@ -49,7 +49,7 @@ class WideParcelFirstLoadingAlgorithmTest {
         parcels.add(new Parcel(new ArrayList<>() {{ add(new Character[]{'1'}); }}, 11));
         parcels.add(new Parcel(new ArrayList<>() {{ add(new Character[]{'1'}); }}, 12));
 
-        List<Truck> loadedTrucks = new WideParcelFirstLoadingAlgorithm().loadTrucks(parcels);
+        List<Truck> loadedTrucks = new WideParcelFirstLoadingAlgorithm().loadTrucks(parcels, );
 
         assertThat(loadedTrucks.size()).isEqualTo(1);
         assertThat(loadedTrucks.getFirst().getAvailableVolume()).isEqualTo(0);
