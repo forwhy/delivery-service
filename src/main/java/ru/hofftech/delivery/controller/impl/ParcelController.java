@@ -33,7 +33,7 @@ public class ParcelController implements ProcessingController {
 
                 filePath = parcelParameterReaderService.readFilePath();
             } catch (Exception exception) {
-                System.out.printf(exception.getMessage());
+                System.out.println(exception.getMessage());
             }
         }
         System.out.println("Processing finished");

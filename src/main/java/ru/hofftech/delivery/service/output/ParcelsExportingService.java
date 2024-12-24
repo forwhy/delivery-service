@@ -29,6 +29,8 @@ public class ParcelsExportingService {
 
     private String collectStringFromParcels(List<PlacedParcelDto> parcels) {
         StringBuilder stringBuilder = new StringBuilder();
+
+
         for (String parcel : parcels.stream()
                 .map(parcelMapper::mapPlacedParcelDtoToString)
                 .toList()) {

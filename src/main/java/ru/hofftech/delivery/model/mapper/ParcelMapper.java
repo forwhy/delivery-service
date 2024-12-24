@@ -29,7 +29,7 @@ public class ParcelMapper {
     }
 
     public String mapPlacedParcelDtoToString(PlacedParcelDto placedParcelDto) {
-        return VALID_PARCEL_VARIANTS.get(placedParcelDto.getVolume() + INDEX_OFFSET).formatted();
+        return VALID_PARCEL_VARIANTS.get(placedParcelDto.getVolume() - INDEX_OFFSET).formatted();
     }
 
     private List<Character[]> collectLinesIntoMatrix(List<String> parcelLines) {
