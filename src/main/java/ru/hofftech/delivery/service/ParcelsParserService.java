@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.hofftech.delivery.model.entity.Parcel;
 import ru.hofftech.delivery.service.validation.ParcelValidationService;
 import ru.hofftech.delivery.util.FileReader;
-import ru.hofftech.delivery.model.mapper.ParcelMapper;
+import ru.hofftech.delivery.mapper.ParcelMapper;
 
 import java.util.ArrayList;
 import java.util.List;

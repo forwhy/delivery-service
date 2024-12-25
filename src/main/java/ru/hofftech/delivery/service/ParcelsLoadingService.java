@@ -13,7 +13,7 @@ public class ParcelsLoadingService {
     private final PackageLoadingAlgorithmFactory packageLoadingAlgorithmFactory;
 
     public List<Truck> loadTrucks(List<Parcel> parcels, LoadingOptionsDto loadingOptions) {
-        return packageLoadingAlgorithmFactory.getTruckLoader(loadingOptions.getAlgorithm())
-                .loadTrucks(parcels, loadingOptions.getTrucksCountLimit());
+        return packageLoadingAlgorithmFactory.createLoadingAlgorithm(loadingOptions.algorithm())
+                .loadTrucks(parcels, loadingOptions.trucksCountLimit());
     }
 }

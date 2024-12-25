@@ -1,15 +1,13 @@
-package ru.hofftech.delivery.service.output.impl;
+package ru.hofftech.delivery.service.output;
 
 import lombok.RequiredArgsConstructor;
 import ru.hofftech.delivery.enums.LoadingAlgorithm;
 import ru.hofftech.delivery.model.entity.Truck;
-import ru.hofftech.delivery.service.output.ExportService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
-public class PrintService implements ExportService {
+public class PrintService {
 
     public void exportParcelsPlacementResult(List<Truck> loadedTrucks, LoadingAlgorithm algorithm) {
 

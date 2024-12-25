@@ -1,10 +1,26 @@
 package ru.hofftech.delivery;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.hofftech.delivery.controller.ConsoleController;
-import ru.hofftech.delivery.enums.mapper.CommandMapper;
-import ru.hofftech.delivery.factory.ProcessingControllerFactory;
+import ru.hofftech.delivery.mapper.CommandMapper;
+import ru.hofftech.delivery.mapper.LoadingAlgorithmMapper;
+import ru.hofftech.delivery.factory.PackageLoadingAlgorithmFactory;
+import ru.hofftech.delivery.mapper.ParcelMapper;
+import ru.hofftech.delivery.mapper.TruckMapper;
 import ru.hofftech.delivery.service.CommandReaderService;
-import ru.hofftech.delivery.service.validation.CommandValidationService;
+import ru.hofftech.delivery.service.PackingService;
+import ru.hofftech.delivery.service.ParcelParameterReaderService;
+import ru.hofftech.delivery.service.ParcelsLoadingService;
+import ru.hofftech.delivery.service.ParcelsParserService;
+import ru.hofftech.delivery.service.TruckParameterReaderService;
+import ru.hofftech.delivery.service.TrucksParserService;
+import ru.hofftech.delivery.service.UnpackingService;
+import ru.hofftech.delivery.service.output.ParcelsExportingService;
+import ru.hofftech.delivery.service.output.ExportToJsonService;
+import ru.hofftech.delivery.service.output.PrintService;
+import ru.hofftech.delivery.service.validation.InputValidationService;
+import ru.hofftech.delivery.service.validation.ParcelValidationService;
+import ru.hofftech.delivery.util.FileReader;
 
 import java.util.Scanner;
 
@@ -14,8 +30,28 @@ public class Main {
         var consoleController = new ConsoleController(
                 new CommandReaderService(
                         new Scanner(System.in),
-                        new CommandMapper(new CommandValidationService())),
-                new ProcessingControllerFactory());
+                        new CommandMapper(),
+                        new InputValidationService()),
+                new PackingService(
+                        new ParcelsLoadingService(
+                                new PackageLoadingAlgorithmFactory()
+                        ),
+                        new ParcelParameterReaderService(
+                                new Scanner(System.in),
+                                new LoadingAlgorithmMapper(),
+                                new InputValidationService()),
+                        new ExportToJsonService(new TruckMapper()),
+                        new ParcelsParserService(
+                                new ParcelValidationService(),
+                                new FileReader(),
+                                new ParcelMapper()),
+                        new PrintService()
+                ),
+                new UnpackingService(
+                        new TrucksParserService(new FileReader(), new ObjectMapper()),
+                        new TruckParameterReaderService(new Scanner(System.in)),
+                        new ParcelsExportingService(new ParcelMapper())
+                ));
 
         consoleController.listen();
     }

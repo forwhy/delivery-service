@@ -1,4 +1,4 @@
-package ru.hofftech.delivery.model.mapper;
+package ru.hofftech.delivery.mapper;
 
 import ru.hofftech.delivery.model.dto.LoadedTruckDto;
 import ru.hofftech.delivery.model.entity.Truck;

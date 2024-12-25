@@ -3,10 +3,10 @@ package ru.hofftech.delivery.service.algorithm.impl;
 import lombok.extern.slf4j.Slf4j;
 import ru.hofftech.delivery.exception.InvalidAttemptToPutParcelIntoTruckException;
 import ru.hofftech.delivery.exception.TrucksOverflowException;
-import ru.hofftech.delivery.service.algorithm.ParcelLoadingAlgorithm;
 import ru.hofftech.delivery.model.entity.MatrixPosition;
 import ru.hofftech.delivery.model.entity.Parcel;
 import ru.hofftech.delivery.model.entity.Truck;
+import ru.hofftech.delivery.service.algorithm.ParcelLoadingAlgorithm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +22,15 @@ public class SingleParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
 
         var trucks = new ArrayList<Truck>();
         for (var parcel : parcels) {
-                trucks.add(loadNewTruck(parcel, parcel.getNumber()));
+            trucks.add(loadNewTruck(parcel, parcel.getNumber()));
         }
         return trucks;
+    }
+
+    private void validateTrucksCountLimit(Integer trucksCountLimit, Integer trucksNeededCount) {
+        if (trucksNeededCount > trucksCountLimit) {
+            throw new TrucksOverflowException();
+        }
     }
 
     private Truck loadNewTruck(Parcel parcel, Integer truckNumber) {
@@ -37,7 +43,13 @@ public class SingleParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
 
     private void validateTruckCapacityEnoughForParcel(Truck truck, Parcel parcel) {
         if (!truck.isEmptyTruckCapacityEnoughForParcel(parcel)) {
-            throw new InvalidAttemptToPutParcelIntoTruckException();
+            throw new InvalidAttemptToPutParcelIntoTruckException(
+                    "Invalid attempt to put parcel of size %dx%d into truck of size %dx%d".formatted(
+                            parcel.getHeight(),
+                            parcel.getWidth(),
+                            truck.getHeight(),
+                            truck.getWidth())
+            );
         }
     }
 

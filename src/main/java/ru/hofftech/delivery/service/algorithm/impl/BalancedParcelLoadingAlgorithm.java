@@ -2,6 +2,8 @@ package ru.hofftech.delivery.service.algorithm.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import ru.hofftech.delivery.exception.TrucksOverflowException;
+import ru.hofftech.delivery.model.entity.MatrixPosition;
 import ru.hofftech.delivery.model.entity.Parcel;
 import ru.hofftech.delivery.model.entity.Truck;
 import ru.hofftech.delivery.service.algorithm.ParcelLoadingAlgorithm;
@@ -13,7 +15,8 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
-public class BalancedParcelLoadingAlgorithm extends WideParcelFirstLoadingAlgorithm implements ParcelLoadingAlgorithm {
+public class BalancedParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
+    protected static final Integer NEXT_TRUCK_NUMBER_INCREMENT = 1;
 
     @Override
     public List<Truck> loadTrucks(List<Parcel> parcels, Integer trucksCountLimit) {
@@ -27,8 +30,7 @@ public class BalancedParcelLoadingAlgorithm extends WideParcelFirstLoadingAlgori
         return removeUnusedTrucks(trucks);
     }
 
-    @Override
-    protected void putParcelIntoAnySuitableTruck(Parcel parcel, List<Truck> trucks) {
+    private void putParcelIntoAnySuitableTruck(Parcel parcel, List<Truck> trucks) {
         trucks.sort(Comparator.comparingInt(Truck::getAvailableVolume).reversed());
 
         for (var truck : trucks) {
@@ -42,9 +44,7 @@ public class BalancedParcelLoadingAlgorithm extends WideParcelFirstLoadingAlgori
             }
         }
 
-        var newTruckNumber = trucks.size() + NEXT_TRUCK_NUMBER_INCREMENT;
-        log.info("Creating new truck #{}", newTruckNumber);
-        var truck = new Truck(newTruckNumber);
+        var truck = createNewTruck(trucks.size() + NEXT_TRUCK_NUMBER_INCREMENT);
         putParcelIntoTruck(parcel, truck);
         trucks.add(truck);
     }
@@ -52,16 +52,75 @@ public class BalancedParcelLoadingAlgorithm extends WideParcelFirstLoadingAlgori
     private List<Truck> initializeTrucksBatch(Integer count) {
         var trucks = new ArrayList<Truck>();
         while (trucks.size() < count) {
-            var newTruckNumber = trucks.size() + NEXT_TRUCK_NUMBER_INCREMENT;
-            log.info("Creating new truck #{}", newTruckNumber);
-            trucks.add(new Truck(newTruckNumber));
+            trucks.add(createNewTruck(trucks.size() + NEXT_TRUCK_NUMBER_INCREMENT));
         }
         return trucks;
+    }
+
+    private Truck createNewTruck(Integer truckNumber) {
+        log.info("Creating new truck #{}", truckNumber);
+        return new Truck(truckNumber);
     }
 
     private List<Truck> removeUnusedTrucks(List<Truck> trucks) {
         return trucks.stream()
                 .filter(truck -> truck.getAvailableVolume() < truck.getHeight() * truck.getWidth())
                 .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private boolean putParcelIntoTruck(Parcel parcel, Truck truck) {
+        if (!isTruckAvailableVolumeForParcel(truck, parcel)) {
+            return false;
+        }
+
+        var availablePositionForParcel = findAvailablePositionForParcel(truck, parcel);
+        if (availablePositionForParcel == null) {
+            return false;
+        }
+        truck.putParcel(availablePositionForParcel, parcel);
+        log.info(
+                "Truck #{}: parcel #{} placed at [{}:{}].",
+                truck.getNumber(),
+                parcel.getNumber(),
+                availablePositionForParcel.getRowNumber(),
+                availablePositionForParcel.getColumnNumber());
+        return true;
+    }
+
+    private MatrixPosition findAvailablePositionForParcel(Truck truck, Parcel parcel) {
+        var placementPosition = truck.findNearestAvailablePosition(new MatrixPosition());
+
+        while (placementPosition != null) {
+            placementPosition = updatePlacementPositionConsideringNeededWidth(truck, parcel, placementPosition);
+
+            if (truck.isTruckHeightNotAvailable(placementPosition, parcel.getHeight())) {
+                return null;
+            }
+
+            if (truck.canPutParcel(placementPosition, parcel)) {
+                return placementPosition;
+            }
+
+            placementPosition = truck.findNearestAvailablePosition(truck.findNextPosition(placementPosition));
+        }
+
+        return null;
+    }
+
+    private MatrixPosition updatePlacementPositionConsideringNeededWidth(Truck truck, Parcel parcel, MatrixPosition currentPosition) {
+        if (truck.isTruckWidthNotAvailable(currentPosition, parcel.getWidth())) {
+            return new MatrixPosition(currentPosition.getNextRowNumber(), MatrixPosition.DEFAULT_START_COLUMN);
+        }
+        return currentPosition;
+    }
+
+    private boolean isTruckAvailableVolumeForParcel(Truck truck, Parcel parcel) {
+        return truck.getAvailableVolume() >= parcel.getVolume();
+    }
+
+    private void validateTrucksCountLimit(Integer trucksCountLimit, Integer trucksNeededCount) {
+        if (trucksNeededCount > trucksCountLimit) {
+            throw new TrucksOverflowException();
+        }
     }
 }

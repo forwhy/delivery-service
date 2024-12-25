@@ -6,14 +6,13 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+@Getter
 public class Parcel {
     private static final Integer INDEX_OFFSET = 1;
     private static final Integer START_ROW_INDEX = 0;
     private static final Integer START_COLUMN_INDEX = 0;
     private final Integer volume;
-    @Getter
     private final List<Character[]> parcelMatrix;
-    @Getter
     private final Integer number;
 
     public Parcel(List<Character[]> matrix, Integer number) {
@@ -32,10 +31,6 @@ public class Parcel {
 
     public Integer getHeight() {
         return parcelMatrix.size();
-    }
-
-    public Integer getVolume() {
-        return volume;
     }
 
     public Character[] getRowMatrix(Integer rowNumber) {

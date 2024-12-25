@@ -1,4 +1,4 @@
-package ru.hofftech.delivery.service.output.impl;
+package ru.hofftech.delivery.service.output;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -9,8 +9,7 @@ import ru.hofftech.delivery.exception.ExportToJsonFileException;
 import ru.hofftech.delivery.model.dto.LoadedTruckDto;
 import ru.hofftech.delivery.model.dto.LoadedTrucksDto;
 import ru.hofftech.delivery.model.entity.Truck;
-import ru.hofftech.delivery.model.mapper.TruckMapper;
-import ru.hofftech.delivery.service.output.ExportService;
+import ru.hofftech.delivery.mapper.TruckMapper;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,20 +18,19 @@ import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-public class ExportToJsonService implements ExportService {
+public class ExportToJsonService {
     private static final String EXPORT_FILE_EXTENSION = "json";
     private final TruckMapper truckMapper;
 
-    @Override
     public void exportParcelsPlacementResult(List<Truck> loadedTrucks, LoadingAlgorithm algorithm) {
         String outputFileName = defineExportFileName(algorithm);
-        log.info("Exporting loading result to json file %s started...".formatted(outputFileName));
+        log.info("Exporting loading result to json file {} started...", outputFileName);
         List<LoadedTruckDto> trucks = initializeTrucksDto(loadedTrucks);
 
         try (FileWriter writer = new FileWriter(outputFileName)) {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             gson.toJson(new LoadedTrucksDto(trucks), writer);
-            log.info("Exporting loading result to json file %s finished.".formatted(outputFileName));
+            log.info("Exporting loading result to json file {} finished.", outputFileName);
         } catch (IOException e) {
             throw new ExportToJsonFileException(e.getMessage());
         }
@@ -43,7 +41,6 @@ public class ExportToJsonService implements ExportService {
         for (Truck truck : loadedTrucks) {
             trucks.add(truckMapper.mapTruckToDto(truck));
         }
-
         return trucks;
     }
 

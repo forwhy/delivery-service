@@ -1,6 +1,7 @@
 package ru.hofftech.delivery.service.algorithm.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import ru.hofftech.delivery.exception.TrucksOverflowException;
 import ru.hofftech.delivery.model.entity.MatrixPosition;
 import ru.hofftech.delivery.service.algorithm.ParcelLoadingAlgorithm;
 import ru.hofftech.delivery.model.entity.Parcel;
@@ -26,7 +27,7 @@ public class WideParcelFirstLoadingAlgorithm implements ParcelLoadingAlgorithm {
         return trucks;
     }
 
-    protected void putParcelIntoAnySuitableTruck(Parcel parcel, List<Truck> trucks) {
+    private void putParcelIntoAnySuitableTruck(Parcel parcel, List<Truck> trucks) {
         for (var truck : trucks) {
             if (putParcelIntoTruck(parcel, truck)) {
                 return;
@@ -45,7 +46,7 @@ public class WideParcelFirstLoadingAlgorithm implements ParcelLoadingAlgorithm {
         trucks.add(truck);
     }
 
-    protected boolean putParcelIntoTruck(Parcel parcel, Truck truck) {
+    private boolean putParcelIntoTruck(Parcel parcel, Truck truck) {
         if (!isTruckAvailableVolumeForParcel(truck, parcel)) {
             return false;
         }
@@ -64,13 +65,13 @@ public class WideParcelFirstLoadingAlgorithm implements ParcelLoadingAlgorithm {
         return true;
     }
 
-    protected MatrixPosition findAvailablePositionForParcel(Truck truck, Parcel parcel) {
+    private MatrixPosition findAvailablePositionForParcel(Truck truck, Parcel parcel) {
         var placementPosition = truck.findNearestAvailablePosition(new MatrixPosition());
 
         while (placementPosition != null) {
             placementPosition = updatePlacementPositionConsideringNeededWidth(truck, parcel, placementPosition);
 
-            if (!truck.isTruckHeightAvailable(placementPosition, parcel.getHeight())) {
+            if (truck.isTruckHeightNotAvailable(placementPosition, parcel.getHeight())) {
                 return null;
             }
 
@@ -84,14 +85,20 @@ public class WideParcelFirstLoadingAlgorithm implements ParcelLoadingAlgorithm {
         return null;
     }
 
-    protected MatrixPosition updatePlacementPositionConsideringNeededWidth(Truck truck, Parcel parcel, MatrixPosition currentPosition) {
-        if (!truck.isTruckWidthAvailable(currentPosition, parcel.getWidth())) {
+    private MatrixPosition updatePlacementPositionConsideringNeededWidth(Truck truck, Parcel parcel, MatrixPosition currentPosition) {
+        if (truck.isTruckWidthNotAvailable(currentPosition, parcel.getWidth())) {
             return new MatrixPosition(currentPosition.getNextRowNumber(), MatrixPosition.DEFAULT_START_COLUMN);
         }
         return currentPosition;
     }
 
-    protected boolean isTruckAvailableVolumeForParcel(Truck truck, Parcel parcel) {
+    private boolean isTruckAvailableVolumeForParcel(Truck truck, Parcel parcel) {
         return truck.getAvailableVolume() >= parcel.getVolume();
+    }
+
+    private void validateTrucksCountLimit(Integer trucksCountLimit, Integer trucksNeededCount) {
+        if (trucksNeededCount > trucksCountLimit) {
+            throw new TrucksOverflowException();
+        }
     }
 }

@@ -1,4 +1,4 @@
-package ru.hofftech.delivery.model.mapper;
+package ru.hofftech.delivery.mapper;
 
 import ru.hofftech.delivery.model.dto.PlacedParcelDto;
 import ru.hofftech.delivery.model.entity.Parcel;
@@ -37,7 +37,7 @@ public class ParcelMapper {
 
         for (var line : parcelLines) {
             parcelMatrix.add(line.chars()
-                    .mapToObj(c -> (char) c)
+                    .mapToObj(character -> (char) character)
                     .toArray(Character[]::new));
         }
         return parcelMatrix;

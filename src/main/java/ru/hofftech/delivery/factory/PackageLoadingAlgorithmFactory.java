@@ -8,8 +8,7 @@ import ru.hofftech.delivery.service.algorithm.impl.WideParcelFirstLoadingAlgorit
 
 public class PackageLoadingAlgorithmFactory {
 
-    public ParcelLoadingAlgorithm getTruckLoader(LoadingAlgorithm loadingAlgorithm) {
-
+    public ParcelLoadingAlgorithm createLoadingAlgorithm(LoadingAlgorithm loadingAlgorithm) {
         return switch (loadingAlgorithm) {
             case ONE_TRUCK_PER_PARCEL -> new SingleParcelLoadingAlgorithm();
             case WIDE_FIRST -> new WideParcelFirstLoadingAlgorithm();

@@ -24,7 +24,7 @@ public class Truck {
     @Getter
     private Integer availableVolume;
     @Getter
-    private List<PlacedParcelDto> placedParcels;
+    private final List<PlacedParcelDto> placedParcels;
     private final Character[][] truckMatrix;
 
     public Truck(Integer number) {
@@ -45,7 +45,8 @@ public class Truck {
     public MatrixPosition findNearestAvailablePosition(MatrixPosition currentPosition) {
         var nextPosition = currentPosition;
 
-        while (truckMatrix[nextPosition.getRowNumber()][nextPosition.getColumnNumber()] != EMPTY_POSITION) {
+        while (nextPosition != null
+            && truckMatrix[nextPosition.getRowNumber()][nextPosition.getColumnNumber()] != EMPTY_POSITION) {
             nextPosition = findNextPosition(nextPosition);
         }
         return nextPosition;
@@ -60,12 +61,12 @@ public class Truck {
                 : new MatrixPosition(currentPosition.getRowNumber(), currentPosition.getNextColumnNumber());
     }
 
-    public boolean isTruckHeightAvailable(MatrixPosition startPosition, Integer neededHeight) {
-        return height - startPosition.getRowNumber() >= neededHeight;
+    public boolean isTruckHeightNotAvailable(MatrixPosition startPosition, Integer neededHeight) {
+        return height - startPosition.getRowNumber() < neededHeight;
     }
 
-    public boolean isTruckWidthAvailable(MatrixPosition startPosition, Integer neededWidth) {
-        return width - startPosition.getColumnNumber() >= neededWidth;
+    public boolean isTruckWidthNotAvailable(MatrixPosition startPosition, Integer neededWidth) {
+        return width - startPosition.getColumnNumber() < neededWidth;
     }
 
     public boolean canPutParcel(MatrixPosition point, Parcel parcel) {

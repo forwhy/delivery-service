@@ -2,7 +2,8 @@ package ru.hofftech.delivery.service;
 
 import lombok.RequiredArgsConstructor;
 import ru.hofftech.delivery.enums.LoadingAlgorithm;
-import ru.hofftech.delivery.enums.mapper.LoadingAlgorithmMapper;
+import ru.hofftech.delivery.mapper.LoadingAlgorithmMapper;
+import ru.hofftech.delivery.service.validation.InputValidationService;
 
 import java.util.Scanner;
 
@@ -10,10 +11,13 @@ import java.util.Scanner;
 public class ParcelParameterReaderService {
     private final Scanner scanner;
     private final LoadingAlgorithmMapper loadingAlgorithmMapper;
+    private final InputValidationService inputValidationService;
 
     public String readFilePath() {
         System.out.println("Enter path to a file with parcels:");
-        return scanner.nextLine();
+        var input = scanner.nextLine();
+        inputValidationService.validateInputString(input);
+        return input;
     }
 
     public LoadingAlgorithm readLoadingAlgorithm() {
@@ -26,11 +30,15 @@ public class ParcelParameterReaderService {
                 LoadingAlgorithm.BALANCED.getAlgorithmNumber(),
                 LoadingAlgorithm.BALANCED.name());
 
-        return loadingAlgorithmMapper.mapIntToLoadingAlgorithm(scanner.nextInt());
+        var input = scanner.nextLine();
+        inputValidationService.validateInputStringConvertibleToInteger(input);
+        return loadingAlgorithmMapper.mapIntToLoadingAlgorithm(Integer.parseInt(input));
     }
 
     public Integer readTrucksCountLimit() {
         System.out.println("Enter trucks count limit:");
-        return scanner.nextInt();
+        var input = scanner.nextLine();
+        inputValidationService.validateInputStringConvertibleToInteger(input);
+        return Integer.parseInt(input);
     }
 }

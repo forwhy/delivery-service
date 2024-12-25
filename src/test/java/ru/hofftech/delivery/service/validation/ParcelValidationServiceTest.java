@@ -13,7 +13,6 @@ public class ParcelValidationServiceTest {
     @Test
     public void validateParcelString_invalidParcelString_shouldNotThrowException() {
         var parcelValidationService = new ParcelValidationService();
-// TODO как протестить, что метод не кидает исключение?
         assertThatThrownBy(() -> parcelValidationService.validateParcelString("1%n"))
                 .doesNotThrowAnyException();
         assertThatThrownBy(() -> parcelValidationService.validateParcelString("22%n"))
