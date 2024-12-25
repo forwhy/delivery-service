@@ -11,6 +11,7 @@ public class CommandMapper {
         return switch (commandNumber) {
             case 1 -> Command.IMPORT_TRUCKS_EXPORT_PARCELS;
             case 2 -> Command.IMPORT_PARCELS_EXPORT_TRUCKS;
+            case 3 -> Command.EXIT;
             default -> throw new InvalidCommandException(commandNumber);
         };
     }
