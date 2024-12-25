@@ -14,6 +14,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class TrucksParserService {
+
     private final FileReader fileReader;
     private final ObjectMapper objectMapper;
 

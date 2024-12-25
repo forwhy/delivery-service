@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Truck {
+
     private static final Integer START_ROW_NUMBER = 0;
     private static final Integer START_COLUMN_NUMBER = 0;
     private static final Character EMPTY_POSITION = ' ';

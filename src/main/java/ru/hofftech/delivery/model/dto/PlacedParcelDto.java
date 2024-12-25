@@ -10,6 +10,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 public class PlacedParcelDto implements Serializable {
+
     private Integer volume;
     private Integer number;
     private Integer startRow;

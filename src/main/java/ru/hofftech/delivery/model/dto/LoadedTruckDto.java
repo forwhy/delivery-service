@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class LoadedTruckDto implements Serializable {
+
     private Integer number;
     private List<PlacedParcelDto> parcels;
 

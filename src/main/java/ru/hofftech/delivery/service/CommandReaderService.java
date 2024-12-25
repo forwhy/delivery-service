@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 @RequiredArgsConstructor
 public class CommandReaderService {
+
     private final Scanner scanner;
     private final CommandMapper commandMapper;
     private final InputValidationService inputValidationService;

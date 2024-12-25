@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ParcelMapper {
+
     private static final String LINE_DELIMITER = "%n";
     private static final Integer INDEX_OFFSET = 1;
     private static final List<String> VALID_PARCEL_VARIANTS = Arrays.asList(

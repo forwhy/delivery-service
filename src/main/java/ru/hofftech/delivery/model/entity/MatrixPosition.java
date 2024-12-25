@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class MatrixPosition {
+
     public static final Integer DEFAULT_START_ROW = 0;
     public static final Integer DEFAULT_START_COLUMN = 0;
     private static final Integer NEXT_ROW_NUMBER_INCREMENT = 1;

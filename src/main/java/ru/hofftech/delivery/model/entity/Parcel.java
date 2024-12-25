@@ -8,6 +8,7 @@ import java.util.List;
 
 @Getter
 public class Parcel {
+
     private static final Integer INDEX_OFFSET = 1;
     private static final Integer START_ROW_INDEX = 0;
     private static final Integer START_COLUMN_INDEX = 0;

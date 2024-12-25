@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class ParcelsExportingService {
+
     private static final String OUTPUT_FILE_NAME = "parcels.txt";
     private final ParcelMapper parcelMapper;
 

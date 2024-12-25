@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 @RequiredArgsConstructor
 public class ParcelParameterReaderService {
+
     private final Scanner scanner;
     private final LoadingAlgorithmMapper loadingAlgorithmMapper;
     private final InputValidationService inputValidationService;

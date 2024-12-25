@@ -10,6 +10,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class UnpackingService {
+
     private final TrucksParserService trucksParserService;
     private final TruckParameterReaderService truckParameterReaderService;
     private final ParcelsExportingService parcelsExportingService;

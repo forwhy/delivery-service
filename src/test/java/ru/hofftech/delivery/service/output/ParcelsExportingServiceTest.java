@@ -16,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 class ParcelsExportingServiceTest {
+
     private static final String PARCEL_FILE_NAME = "parcels.txt";
 
     @AfterEach

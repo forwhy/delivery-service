@@ -19,6 +19,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class ExportToJsonService {
+
     private static final String EXPORT_FILE_EXTENSION = "json";
     private final TruckMapper truckMapper;
 

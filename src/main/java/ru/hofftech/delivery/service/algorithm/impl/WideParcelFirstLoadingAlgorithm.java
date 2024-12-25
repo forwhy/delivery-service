@@ -13,6 +13,7 @@ import java.util.List;
 
 @Slf4j
 public class WideParcelFirstLoadingAlgorithm implements ParcelLoadingAlgorithm {
+
     protected static final Integer NEXT_TRUCK_NUMBER_INCREMENT = 1;
 
     @Override

@@ -8,6 +8,7 @@ import ru.hofftech.delivery.service.UnpackingService;
 
 @RequiredArgsConstructor
 public class ConsoleController {
+
     private final CommandReaderService commandReaderService;
     private final PackingService packingService;
     private final UnpackingService unpackingService;

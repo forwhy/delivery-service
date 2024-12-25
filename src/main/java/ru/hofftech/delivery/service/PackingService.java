@@ -10,6 +10,7 @@ import ru.hofftech.delivery.service.output.PrintService;
 @Slf4j
 @RequiredArgsConstructor
 public class PackingService {
+
     private final ParcelsLoadingService parcelsLoadingService;
     private final ParcelParameterReaderService parcelParameterReaderService;
     private final ExportToJsonService exportToJsonService;

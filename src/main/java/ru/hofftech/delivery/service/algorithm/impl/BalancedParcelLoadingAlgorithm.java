@@ -16,7 +16,8 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class BalancedParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
-    protected static final Integer NEXT_TRUCK_NUMBER_INCREMENT = 1;
+
+    private static final Integer NEXT_TRUCK_NUMBER_INCREMENT = 1;
 
     @Override
     public List<Truck> loadTrucks(List<Parcel> parcels, Integer trucksCountLimit) {

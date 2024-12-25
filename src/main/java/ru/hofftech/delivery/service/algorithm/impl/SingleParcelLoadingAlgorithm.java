@@ -13,6 +13,7 @@ import java.util.List;
 
 @Slf4j
 public class SingleParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
+
     private static final Integer PARCEL_START_ROW_NUMBER = 0;
     private static final Integer PARCEL_START_COLUMN_NUMBER = 0;
 

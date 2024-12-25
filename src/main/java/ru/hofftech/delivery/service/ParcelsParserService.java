@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Slf4j
 @RequiredArgsConstructor
 public class ParcelsParserService {
+
     private static final Integer PARCEL_NUMERATION_START = 1;
     private static final String PARCEL_LINE_DELIMITER = "%n";
     private final ParcelValidationService parcelValidationService;

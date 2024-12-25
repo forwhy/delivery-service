@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 @RequiredArgsConstructor
 public class TruckParameterReaderService {
+
     private final Scanner scanner;
 
     public String readFilePath() {

@@ -10,6 +10,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 public class ParcelsLoadingService {
+
     private final PackageLoadingAlgorithmFactory packageLoadingAlgorithmFactory;
 
     public List<Truck> loadTrucks(List<Parcel> parcels, LoadingOptionsDto loadingOptions) {

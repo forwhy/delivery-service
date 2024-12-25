@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class LoadedTrucksDto implements Serializable {
+
     private List<LoadedTruckDto> trucks;
 
     public LoadedTrucksDto(List<LoadedTruckDto> trucks) {
