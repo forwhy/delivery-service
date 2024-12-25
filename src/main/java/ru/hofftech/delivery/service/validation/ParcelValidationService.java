@@ -9,6 +9,7 @@ import java.util.List;
 
 @Slf4j
 public class ParcelValidationService {
+    
     private static final List<String> VALID_PARCEL_VARIANTS = Arrays.asList(
             "1%n",
             "22%n",
