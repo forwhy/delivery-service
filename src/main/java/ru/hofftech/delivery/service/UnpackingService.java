@@ -2,8 +2,8 @@ package ru.hofftech.delivery.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import ru.hofftech.delivery.model.dto.LoadedTruckDto;
 import ru.hofftech.delivery.model.dto.PlacedParcelDto;
-import ru.hofftech.delivery.service.output.ParcelsExportingService;
 
 import java.util.List;
 
@@ -12,19 +12,14 @@ import java.util.List;
 public class UnpackingService {
 
     private final TrucksParserService trucksParserService;
-    private final TruckParameterReaderService truckParameterReaderService;
-    private final ParcelsExportingService parcelsExportingService;
 
-    public void start() {
-        String filePath = truckParameterReaderService.readFilePath();
+    public List<PlacedParcelDto> unpack(String filePath) {
+        return extractParcels(trucksParserService.parseTrucksFile(filePath));
+    }
 
-        try {
-            List<PlacedParcelDto> parcels = trucksParserService.parseTrucksFile(filePath).stream()
-                    .flatMap(t -> t.getParcels().stream())
-                    .toList();
-            parcelsExportingService.exportParcelsToTxtFile(parcels);
-        } catch (Exception e) {
-            System.out.printf(e.getMessage());
-        }
+    private List<PlacedParcelDto> extractParcels(List<LoadedTruckDto> trucks) {
+        return trucks.stream()
+                .flatMap(t -> t.getParcels().stream())
+                .toList();
     }
 }

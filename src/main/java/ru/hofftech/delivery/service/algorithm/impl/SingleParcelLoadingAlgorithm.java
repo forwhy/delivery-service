@@ -25,29 +25,30 @@ public class SingleParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
         for (var parcel : parcels) {
             trucks.add(loadNewTruck(parcel, parcel.getNumber()));
         }
+
         return trucks;
     }
 
     private void validateTrucksCountLimit(Integer trucksCountLimit, Integer trucksNeededCount) {
         if (trucksNeededCount > trucksCountLimit) {
-            throw new TrucksOverflowException();
+            throw new TrucksOverflowException(trucksNeededCount, trucksCountLimit);
         }
     }
 
     private Truck loadNewTruck(Parcel parcel, Integer truckNumber) {
-        var truck = new Truck(truckNumber);
-        log.info("Truck #{} created.", parcel.getNumber());
-
+        var truck = createNewTruck(truckNumber);
         validateTruckCapacityEnoughForParcel(truck, parcel);
+
         return putParcelIntoTruck(truck, parcel);
     }
 
     private void validateTruckCapacityEnoughForParcel(Truck truck, Parcel parcel) {
         if (!truck.isEmptyTruckCapacityEnoughForParcel(parcel)) {
             throw new InvalidAttemptToPutParcelIntoTruckException(
-                    "Invalid attempt to put parcel of size %dx%d into truck of size %dx%d".formatted(
+                    "Invalid attempt to put parcel of size %dx%d into truck #%d of size %dx%d".formatted(
                             parcel.getHeight(),
                             parcel.getWidth(),
+                            truck.getNumber(),
                             truck.getHeight(),
                             truck.getWidth())
             );
@@ -68,6 +69,13 @@ public class SingleParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
         } else {
             throw new IllegalArgumentException("Can't place parcel into a truck");
         }
+
         return truck;
+    }
+
+    private Truck createNewTruck(Integer truckNumber) {
+        log.info("Creating new truck #{}", truckNumber);
+
+        return new Truck(truckNumber);
     }
 }

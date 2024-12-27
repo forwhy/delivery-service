@@ -18,6 +18,7 @@ public class ParcelParameterReaderService {
         System.out.println("Enter path to a file with parcels:");
         var input = scanner.nextLine();
         inputValidationService.validateInputString(input);
+
         return input;
     }
 
@@ -33,6 +34,7 @@ public class ParcelParameterReaderService {
 
         var input = scanner.nextLine();
         inputValidationService.validateInputStringConvertibleToInteger(input);
+
         return loadingAlgorithmMapper.mapIntToLoadingAlgorithm(Integer.parseInt(input));
     }
 
@@ -40,6 +42,7 @@ public class ParcelParameterReaderService {
         System.out.println("Enter trucks count limit:");
         var input = scanner.nextLine();
         inputValidationService.validateInputStringConvertibleToInteger(input);
+
         return Integer.parseInt(input);
     }
 }

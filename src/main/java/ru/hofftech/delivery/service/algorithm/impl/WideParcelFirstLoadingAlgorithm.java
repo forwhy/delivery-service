@@ -2,6 +2,7 @@ package ru.hofftech.delivery.service.algorithm.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.hofftech.delivery.exception.TrucksOverflowException;
+import ru.hofftech.delivery.model.DefaultValues;
 import ru.hofftech.delivery.model.entity.MatrixPosition;
 import ru.hofftech.delivery.service.algorithm.ParcelLoadingAlgorithm;
 import ru.hofftech.delivery.model.entity.Parcel;
@@ -25,12 +26,14 @@ public class WideParcelFirstLoadingAlgorithm implements ParcelLoadingAlgorithm {
             putParcelIntoAnySuitableTruck(parcel, trucks);
             validateTrucksCountLimit(trucksCountLimit, trucks.size());
         }
+
         return trucks;
     }
 
     private void putParcelIntoAnySuitableTruck(Parcel parcel, List<Truck> trucks) {
         for (var truck : trucks) {
-            if (putParcelIntoTruck(parcel, truck)) {
+            if (isParcelPutIntoTruck(parcel, truck)) {
+
                 return;
             } else {
                 log.warn(
@@ -43,17 +46,19 @@ public class WideParcelFirstLoadingAlgorithm implements ParcelLoadingAlgorithm {
         var newTruckNumber = trucks.size() + NEXT_TRUCK_NUMBER_INCREMENT;
         log.info("Creating new truck #{}", newTruckNumber);
         var truck = new Truck(newTruckNumber);
-        putParcelIntoTruck(parcel, truck);
+        isParcelPutIntoTruck(parcel, truck);
         trucks.add(truck);
     }
 
-    private boolean putParcelIntoTruck(Parcel parcel, Truck truck) {
+    private boolean isParcelPutIntoTruck(Parcel parcel, Truck truck) {
         if (!isTruckAvailableVolumeForParcel(truck, parcel)) {
+
             return false;
         }
 
         var availablePositionForParcel = findAvailablePositionForParcel(truck, parcel);
         if (availablePositionForParcel == null) {
+
             return false;
         }
         truck.putParcel(availablePositionForParcel, parcel);
@@ -63,6 +68,7 @@ public class WideParcelFirstLoadingAlgorithm implements ParcelLoadingAlgorithm {
                 parcel.getNumber(),
                 availablePositionForParcel.getRowNumber(),
                 availablePositionForParcel.getColumnNumber());
+
         return true;
     }
 
@@ -73,10 +79,12 @@ public class WideParcelFirstLoadingAlgorithm implements ParcelLoadingAlgorithm {
             placementPosition = updatePlacementPositionConsideringNeededWidth(truck, parcel, placementPosition);
 
             if (truck.isTruckHeightNotAvailable(placementPosition, parcel.getHeight())) {
+
                 return null;
             }
 
             if (truck.canPutParcel(placementPosition, parcel)) {
+
                 return placementPosition;
             }
 
@@ -88,18 +96,21 @@ public class WideParcelFirstLoadingAlgorithm implements ParcelLoadingAlgorithm {
 
     private MatrixPosition updatePlacementPositionConsideringNeededWidth(Truck truck, Parcel parcel, MatrixPosition currentPosition) {
         if (truck.isTruckWidthNotAvailable(currentPosition, parcel.getWidth())) {
-            return new MatrixPosition(currentPosition.getNextRowNumber(), MatrixPosition.DEFAULT_START_COLUMN);
+
+            return new MatrixPosition(currentPosition.getNextRowNumber(), DefaultValues.DEFAULT_START_COLUMN);
         }
+
         return currentPosition;
     }
 
     private boolean isTruckAvailableVolumeForParcel(Truck truck, Parcel parcel) {
+
         return truck.getAvailableVolume() >= parcel.getVolume();
     }
 
     private void validateTrucksCountLimit(Integer trucksCountLimit, Integer trucksNeededCount) {
         if (trucksNeededCount > trucksCountLimit) {
-            throw new TrucksOverflowException();
+            throw new TrucksOverflowException(trucksNeededCount, trucksCountLimit);
         }
     }
 }

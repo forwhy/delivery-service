@@ -11,6 +11,7 @@ public class TruckParameterReaderService {
 
     public String readFilePath() {
         System.out.println("Enter path to a file with trucks:");
+
         return scanner.nextLine();
     }
 }

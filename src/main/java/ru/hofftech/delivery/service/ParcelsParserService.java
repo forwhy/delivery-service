@@ -27,6 +27,7 @@ public class ParcelsParserService {
         if (fileLines.isEmpty()) {
             throw new IllegalArgumentException("No data to process");
         }
+
         return extractParcels(fileLines);
     }
 
@@ -46,6 +47,7 @@ public class ParcelsParserService {
         }
 
         log.info("{} valid parcels successfully parsed", parcels.size());
+
         return parcels;
     }
 

@@ -25,7 +25,9 @@ public class ParcelMapper {
 
     public Parcel mapStringToParcel(String parcelString, Integer parcelNumber) {
         return new Parcel(
-                collectLinesIntoMatrix(Arrays.stream(parcelString.split(LINE_DELIMITER)).toList().reversed()),
+                collectLinesIntoMatrix(Arrays.stream(parcelString.split(LINE_DELIMITER))
+                        .toList()
+                        .reversed()),
                 parcelNumber);
     }
 
@@ -37,10 +39,15 @@ public class ParcelMapper {
         var parcelMatrix = new ArrayList<Character[]>();
 
         for (var line : parcelLines) {
-            parcelMatrix.add(line.chars()
-                    .mapToObj(character -> (char) character)
-                    .toArray(Character[]::new));
+            parcelMatrix.add(parseMatrixLine(line));
         }
+
         return parcelMatrix;
+    }
+
+    private Character[] parseMatrixLine(String line) {
+        return line.chars()
+                .mapToObj(character -> (char) character)
+                .toArray(Character[]::new);
     }
 }

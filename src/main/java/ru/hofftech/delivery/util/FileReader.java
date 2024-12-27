@@ -12,6 +12,7 @@ public class FileReader {
 
     public List<String> readAllLines(String filePath) {
         try {
+
             return Files.readAllLines(new File(getClass().getClassLoader().getResource(filePath).toURI()).toPath());
         } catch (Exception e) {
             throw new InvalidFilePathException(filePath);

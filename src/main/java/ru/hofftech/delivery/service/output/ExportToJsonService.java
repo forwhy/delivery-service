@@ -42,6 +42,7 @@ public class ExportToJsonService {
         for (Truck truck : loadedTrucks) {
             trucks.add(truckMapper.mapTruckToDto(truck));
         }
+
         return trucks;
     }
 

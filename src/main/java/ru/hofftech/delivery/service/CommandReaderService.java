@@ -26,6 +26,7 @@ public class CommandReaderService {
 
         var input = scanner.nextLine();
         inputValidationService.validateInputStringConvertibleToInteger(input);
+
         return commandMapper.mapIntToCommand(Integer.parseInt(input));
     }
 }

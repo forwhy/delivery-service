@@ -36,22 +36,22 @@ public class Main {
                         new ParcelsLoadingService(
                                 new PackageLoadingAlgorithmFactory()
                         ),
-                        new ParcelParameterReaderService(
-                                new Scanner(System.in),
-                                new LoadingAlgorithmMapper(),
-                                new InputValidationService()),
-                        new ExportToJsonService(new TruckMapper()),
                         new ParcelsParserService(
                                 new ParcelValidationService(),
                                 new FileReader(),
-                                new ParcelMapper()),
-                        new PrintService()
+                                new ParcelMapper())
                 ),
                 new UnpackingService(
-                        new TrucksParserService(new FileReader(), new ObjectMapper()),
-                        new TruckParameterReaderService(new Scanner(System.in)),
-                        new ParcelsExportingService(new ParcelMapper())
-                ));
+                        new TrucksParserService(new FileReader(), new ObjectMapper())
+                ),
+                new ParcelParameterReaderService(
+                        new Scanner(System.in),
+                        new LoadingAlgorithmMapper(),
+                        new InputValidationService()),
+                new TruckParameterReaderService(new Scanner(System.in)),
+                new ExportToJsonService(new TruckMapper()),
+                new PrintService(),
+                new ParcelsExportingService(new ParcelMapper()));
 
         consoleController.listen();
     }

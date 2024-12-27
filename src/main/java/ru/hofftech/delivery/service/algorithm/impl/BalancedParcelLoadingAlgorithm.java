@@ -3,6 +3,7 @@ package ru.hofftech.delivery.service.algorithm.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.hofftech.delivery.exception.TrucksOverflowException;
+import ru.hofftech.delivery.model.DefaultValues;
 import ru.hofftech.delivery.model.entity.MatrixPosition;
 import ru.hofftech.delivery.model.entity.Parcel;
 import ru.hofftech.delivery.model.entity.Truck;
@@ -28,6 +29,7 @@ public class BalancedParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
             putParcelIntoAnySuitableTruck(parcel, trucks);
             validateTrucksCountLimit(trucksCountLimit, trucks.size());
         }
+
         return removeUnusedTrucks(trucks);
     }
 
@@ -35,7 +37,8 @@ public class BalancedParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
         trucks.sort(Comparator.comparingInt(Truck::getAvailableVolume).reversed());
 
         for (var truck : trucks) {
-            if (putParcelIntoTruck(parcel, truck)) {
+            if (isParcelPutIntoTruck(parcel, truck)) {
+
                 return;
             } else {
                 log.warn(
@@ -46,7 +49,7 @@ public class BalancedParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
         }
 
         var truck = createNewTruck(trucks.size() + NEXT_TRUCK_NUMBER_INCREMENT);
-        putParcelIntoTruck(parcel, truck);
+        isParcelPutIntoTruck(parcel, truck);
         trucks.add(truck);
     }
 
@@ -55,11 +58,13 @@ public class BalancedParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
         while (trucks.size() < count) {
             trucks.add(createNewTruck(trucks.size() + NEXT_TRUCK_NUMBER_INCREMENT));
         }
+
         return trucks;
     }
 
     private Truck createNewTruck(Integer truckNumber) {
         log.info("Creating new truck #{}", truckNumber);
+
         return new Truck(truckNumber);
     }
 
@@ -69,13 +74,15 @@ public class BalancedParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private boolean putParcelIntoTruck(Parcel parcel, Truck truck) {
+    private boolean isParcelPutIntoTruck(Parcel parcel, Truck truck) {
         if (!isTruckAvailableVolumeForParcel(truck, parcel)) {
+
             return false;
         }
 
         var availablePositionForParcel = findAvailablePositionForParcel(truck, parcel);
-        if (availablePositionForParcel == null) {
+        if (isAvailablePositionForParcelFound(availablePositionForParcel)) {
+
             return false;
         }
         truck.putParcel(availablePositionForParcel, parcel);
@@ -85,6 +92,7 @@ public class BalancedParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
                 parcel.getNumber(),
                 availablePositionForParcel.getRowNumber(),
                 availablePositionForParcel.getColumnNumber());
+
         return true;
     }
 
@@ -95,10 +103,12 @@ public class BalancedParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
             placementPosition = updatePlacementPositionConsideringNeededWidth(truck, parcel, placementPosition);
 
             if (truck.isTruckHeightNotAvailable(placementPosition, parcel.getHeight())) {
+
                 return null;
             }
 
             if (truck.canPutParcel(placementPosition, parcel)) {
+
                 return placementPosition;
             }
 
@@ -110,8 +120,10 @@ public class BalancedParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
 
     private MatrixPosition updatePlacementPositionConsideringNeededWidth(Truck truck, Parcel parcel, MatrixPosition currentPosition) {
         if (truck.isTruckWidthNotAvailable(currentPosition, parcel.getWidth())) {
-            return new MatrixPosition(currentPosition.getNextRowNumber(), MatrixPosition.DEFAULT_START_COLUMN);
+
+            return new MatrixPosition(currentPosition.getNextRowNumber(), DefaultValues.DEFAULT_START_COLUMN);
         }
+
         return currentPosition;
     }
 
@@ -121,7 +133,11 @@ public class BalancedParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
 
     private void validateTrucksCountLimit(Integer trucksCountLimit, Integer trucksNeededCount) {
         if (trucksNeededCount > trucksCountLimit) {
-            throw new TrucksOverflowException();
+            throw new TrucksOverflowException(trucksNeededCount, trucksCountLimit);
         }
+    }
+
+    private boolean isAvailablePositionForParcelFound(MatrixPosition position) {
+        return position != null;
     }
 }

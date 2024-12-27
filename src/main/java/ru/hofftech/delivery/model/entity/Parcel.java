@@ -42,8 +42,9 @@ public class Parcel {
         var output = new StringBuilder();
 
         for (int i = parcelMatrix.size() - INDEX_OFFSET; i >= START_ROW_INDEX; i--) {
-            output.append(String.format("%s%n", Arrays.toString(this.parcelMatrix.get(i))));
+            output.append(String.format("%s%n", Arrays.toString(parcelMatrix.get(i))));
         }
+
         return output.toString();
     }
 }

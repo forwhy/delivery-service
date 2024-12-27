@@ -21,15 +21,20 @@ public class TrucksParserService {
     public List<LoadedTruckDto> parseTrucksFile(String fileName) {
         log.info("Reading file {}...", fileName);
         var fileLines = fileReader.readAllLines(fileName);
-        if (fileLines.isEmpty()) {
-            throw new IllegalArgumentException("No data to process");
-        }
+        validateFileContent(fileLines);
         try {
             LoadedTrucksDto loadedTrucksDto = objectMapper.readValue(String.join("", fileLines), LoadedTrucksDto.class);
             log.info("{} trucks parsed successfully.", loadedTrucksDto.getTrucks().size());
+
             return loadedTrucksDto.getTrucks();
         } catch (JsonProcessingException e) {
-            throw new JsonParsingException();
+            throw new JsonParsingException(fileName);
+        }
+    }
+
+    private void validateFileContent(List<String> fileLines) {
+        if (fileLines.isEmpty()) {
+            throw new IllegalArgumentException("No data to process");
         }
     }
 }

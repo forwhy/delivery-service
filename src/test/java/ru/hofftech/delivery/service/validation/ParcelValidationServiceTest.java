@@ -5,25 +5,26 @@ import org.junit.jupiter.api.Test;
 import ru.hofftech.delivery.exception.InvalidParcelException;
 import ru.hofftech.delivery.exception.ParcelNullOrEmptyException;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ParcelValidationServiceTest {
 
-    @Disabled
     @Test
     public void validateParcelString_invalidParcelString_shouldNotThrowException() {
         var parcelValidationService = new ParcelValidationService();
-        assertThatThrownBy(() -> parcelValidationService.validateParcelString("1%n"))
+
+        assertThatCode(() -> parcelValidationService.validateParcelString("1%n"))
                 .doesNotThrowAnyException();
-        assertThatThrownBy(() -> parcelValidationService.validateParcelString("22%n"))
+        assertThatCode(() -> parcelValidationService.validateParcelString("22%n"))
                 .doesNotThrowAnyException();
-        assertThatThrownBy(() -> parcelValidationService.validateParcelString("333%n"))
+        assertThatCode(() -> parcelValidationService.validateParcelString("333%n"))
                 .doesNotThrowAnyException();
-        assertThatThrownBy(() -> parcelValidationService.validateParcelString("55555%n"))
+        assertThatCode(() -> parcelValidationService.validateParcelString("55555%n"))
                 .doesNotThrowAnyException();
-        assertThatThrownBy(() -> parcelValidationService.validateParcelString("777%n7777%n"))
+        assertThatCode(() -> parcelValidationService.validateParcelString("777%n7777%n"))
                 .doesNotThrowAnyException();
-        assertThatThrownBy(() -> parcelValidationService.validateParcelString("666%n666%n"))
+        assertThatCode(() -> parcelValidationService.validateParcelString("666%n666%n"))
                 .doesNotThrowAnyException();
     }
 
