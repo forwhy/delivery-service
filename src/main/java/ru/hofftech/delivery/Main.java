@@ -48,7 +48,7 @@ public class Main {
                         new Scanner(System.in),
                         new LoadingAlgorithmMapper(),
                         new InputValidationService()),
-                new TruckParameterReaderService(new Scanner(System.in)),
+                new TruckParameterReaderService(new Scanner(System.in), new InputValidationService()),
                 new ExportToJsonService(new TruckMapper()),
                 new PrintService(),
                 new ParcelsExportingService(new ParcelMapper()));
