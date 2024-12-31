@@ -81,7 +81,7 @@ public class BalancedParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
         }
 
         var availablePositionForParcel = findAvailablePositionForParcel(truck, parcel);
-        if (isAvailablePositionForParcelFound(availablePositionForParcel)) {
+        if (!isAvailablePositionForParcelFound(availablePositionForParcel)) {
 
             return false;
         }
