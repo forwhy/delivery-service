@@ -6,5 +6,6 @@ import ru.hofftech.delivery.model.entity.Truck;
 import java.util.List;
 
 public interface ParcelLoadingAlgorithm {
-    List<Truck> loadTrucks(List<Parcel> parcels);
+
+    List<Truck> loadTrucks(List<Parcel> parcels, Integer trucksCountLimit);
 }

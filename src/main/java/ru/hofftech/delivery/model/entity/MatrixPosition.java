@@ -1,11 +1,11 @@
 package ru.hofftech.delivery.model.entity;
 
 import lombok.Getter;
+import ru.hofftech.delivery.model.DefaultValues;
 
 @Getter
 public class MatrixPosition {
-    public static final Integer DEFAULT_START_ROW = 0;
-    public static final Integer DEFAULT_START_COLUMN = 0;
+
     private static final Integer NEXT_ROW_NUMBER_INCREMENT = 1;
     private static final Integer NEXT_COLUMN_NUMBER_INCREMENT = 1;
 
@@ -13,8 +13,8 @@ public class MatrixPosition {
     private final Integer columnNumber;
 
     public MatrixPosition() {
-        rowNumber = DEFAULT_START_ROW;
-        columnNumber = DEFAULT_START_COLUMN;
+        rowNumber = DefaultValues.DEFAULT_START_ROW;
+        columnNumber = DefaultValues.DEFAULT_START_COLUMN;
     }
 
     public MatrixPosition(Integer rowNumber, Integer columnNumber) {

@@ -1,25 +1,28 @@
 package ru.hofftech.delivery.service.algorithm.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.hofftech.delivery.exception.TrucksOverflowException;
 import ru.hofftech.delivery.model.DefaultValues;
 import ru.hofftech.delivery.model.entity.MatrixPosition;
-import ru.hofftech.delivery.service.algorithm.ParcelLoadingAlgorithm;
 import ru.hofftech.delivery.model.entity.Parcel;
 import ru.hofftech.delivery.model.entity.Truck;
+import ru.hofftech.delivery.service.algorithm.ParcelLoadingAlgorithm;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
-public class WideParcelFirstLoadingAlgorithm implements ParcelLoadingAlgorithm {
+@RequiredArgsConstructor
+public class BalancedParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
 
-    protected static final Integer NEXT_TRUCK_NUMBER_INCREMENT = 1;
+    private static final Integer NEXT_TRUCK_NUMBER_INCREMENT = 1;
 
     @Override
     public List<Truck> loadTrucks(List<Parcel> parcels, Integer trucksCountLimit) {
-        var trucks = new ArrayList<Truck>();
+        var trucks = initializeTrucksBatch(trucksCountLimit);
         parcels.sort(Comparator.comparingInt(Parcel::getWidth).reversed());
 
         for (var parcel : parcels) {
@@ -27,10 +30,12 @@ public class WideParcelFirstLoadingAlgorithm implements ParcelLoadingAlgorithm {
             validateTrucksCountLimit(trucksCountLimit, trucks.size());
         }
 
-        return trucks;
+        return removeUnusedTrucks(trucks);
     }
 
     private void putParcelIntoAnySuitableTruck(Parcel parcel, List<Truck> trucks) {
+        trucks.sort(Comparator.comparingInt(Truck::getAvailableVolume).reversed());
+
         for (var truck : trucks) {
             if (isParcelPutIntoTruck(parcel, truck)) {
 
@@ -43,11 +48,30 @@ public class WideParcelFirstLoadingAlgorithm implements ParcelLoadingAlgorithm {
             }
         }
 
-        var newTruckNumber = trucks.size() + NEXT_TRUCK_NUMBER_INCREMENT;
-        log.info("Creating new truck #{}", newTruckNumber);
-        var truck = new Truck(newTruckNumber);
+        var truck = createNewTruck(trucks.size() + NEXT_TRUCK_NUMBER_INCREMENT);
         isParcelPutIntoTruck(parcel, truck);
         trucks.add(truck);
+    }
+
+    private List<Truck> initializeTrucksBatch(Integer count) {
+        var trucks = new ArrayList<Truck>();
+        while (trucks.size() < count) {
+            trucks.add(createNewTruck(trucks.size() + NEXT_TRUCK_NUMBER_INCREMENT));
+        }
+
+        return trucks;
+    }
+
+    private Truck createNewTruck(Integer truckNumber) {
+        log.info("Creating new truck #{}", truckNumber);
+
+        return new Truck(truckNumber);
+    }
+
+    private List<Truck> removeUnusedTrucks(List<Truck> trucks) {
+        return trucks.stream()
+                .filter(truck -> truck.getAvailableVolume() < truck.getHeight() * truck.getWidth())
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     private boolean isParcelPutIntoTruck(Parcel parcel, Truck truck) {
@@ -57,7 +81,7 @@ public class WideParcelFirstLoadingAlgorithm implements ParcelLoadingAlgorithm {
         }
 
         var availablePositionForParcel = findAvailablePositionForParcel(truck, parcel);
-        if (availablePositionForParcel == null) {
+        if (!isAvailablePositionForParcelFound(availablePositionForParcel)) {
 
             return false;
         }
@@ -104,7 +128,6 @@ public class WideParcelFirstLoadingAlgorithm implements ParcelLoadingAlgorithm {
     }
 
     private boolean isTruckAvailableVolumeForParcel(Truck truck, Parcel parcel) {
-
         return truck.getAvailableVolume() >= parcel.getVolume();
     }
 
@@ -112,5 +135,9 @@ public class WideParcelFirstLoadingAlgorithm implements ParcelLoadingAlgorithm {
         if (trucksNeededCount > trucksCountLimit) {
             throw new TrucksOverflowException(trucksNeededCount, trucksCountLimit);
         }
+    }
+
+    private boolean isAvailablePositionForParcelFound(MatrixPosition position) {
+        return position != null;
     }
 }
