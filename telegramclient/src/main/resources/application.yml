@@ -1,0 +1,11 @@
+telegram:
+  credentials:
+    username: ${BOT_USERNAME}
+    token: ${BOT_TOKEN}
+
+server:
+  port: 8082
+
+services:
+  url:
+    parcels-loader: http://localhost:8080
