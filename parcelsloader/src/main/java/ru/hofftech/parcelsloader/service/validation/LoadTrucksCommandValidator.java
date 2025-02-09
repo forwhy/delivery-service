@@ -1,23 +1,20 @@
 package ru.hofftech.parcelsloader.service.validation;
 
+import ru.hofftech.parcelsloader.enums.LoadingAlgorithm;
+import ru.hofftech.parcelsloader.model.dto.request.LoadTrucksCommandDto;
+
+import java.util.Arrays;
 import java.util.Objects;
 
 public class LoadTrucksCommandValidator {
 
-    public void validateCommandArguments(
-            String user,
-            String parcelsText,
-            String parcelsFile,
-            String truckVariants,
-            String loadType,
-            String outType,
-            String outFile) {
-        validateUser(user);
-        validateParcelsSource(parcelsText, parcelsFile);
-        validateTruckVariants(truckVariants);
-        validateLoadType(loadType);
-        validateOutType(outType);
-        validateOutputParameters(outType, outFile);
+    public void validate(LoadTrucksCommandDto dto) {
+        validateUser(dto.user());
+        validateParcelsSource(dto.parcelsText(), dto.parcelsFile());
+        validateTruckVariants(dto.trucks());
+        validateLoadType(dto.type());
+        validateOutType(dto.out());
+        validateOutputParameters(dto.out(), dto.outFilename());
     }
 
     private void validateUser(String user) {
@@ -55,6 +52,11 @@ public class LoadTrucksCommandValidator {
     private void validateLoadType(String loadType) {
         if (!isStringParameterProvided(loadType)) {
             throw new IllegalArgumentException("Не задан алгоритм погрузки -type");
+        }
+
+        if (Arrays.stream(LoadingAlgorithm.values())
+                .noneMatch(algorithm -> algorithm.getAlgorithmName().equals(loadType))) {
+            throw new IllegalArgumentException(String.format("Неизвестный алгоритм погрузки %s", loadType));
         }
     }
 

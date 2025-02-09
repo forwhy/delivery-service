@@ -7,7 +7,7 @@ import ru.hofftech.parcelsloader.model.dto.LoadedTruckDto;
 import ru.hofftech.parcelsloader.model.dto.PlacedParcelDto;
 import ru.hofftech.parcelsloader.model.dto.request.UnloadTrucksCommandDto;
 import ru.hofftech.parcelsloader.service.BillingService;
-import ru.hofftech.parcelsloader.service.UnpackingService;
+import ru.hofftech.parcelsloader.service.unloading.UnpackingService;
 import ru.hofftech.parcelsloader.service.output.ParcelsExportingService;
 import ru.hofftech.parcelsloader.service.validation.UnloadTrucksCommandValidator;
 

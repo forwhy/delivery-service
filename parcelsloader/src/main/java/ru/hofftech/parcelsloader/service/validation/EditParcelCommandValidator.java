@@ -1,12 +1,17 @@
 package ru.hofftech.parcelsloader.service.validation;
 
+import lombok.RequiredArgsConstructor;
+import ru.hofftech.parcelsloader.exception.InvalidParcelFormException;
 import ru.hofftech.parcelsloader.model.dto.request.EditParcelCommandDto;
 
+@RequiredArgsConstructor
 public class EditParcelCommandValidator {
 
     private static final Integer MAX_SYMBOL_LENGTH = 1;
+    private final ParcelValidator parcelValidator;
 
-    public void validate(EditParcelCommandDto commandDto) throws IllegalArgumentException {
+    public void validate(EditParcelCommandDto commandDto)
+            throws IllegalArgumentException, InvalidParcelFormException {
         if (commandDto == null) {
             throw new IllegalArgumentException("Не переданы входные параметры");
         }
@@ -32,6 +37,10 @@ public class EditParcelCommandValidator {
     private void validateForm(String form) {
         if (form == null || form.isEmpty()) {
             throw new IllegalArgumentException("Не указано значение параметра form");
+        }
+
+        if (!parcelValidator.isFormValid(form)) {
+            throw new InvalidParcelFormException(form);
         }
     }
 

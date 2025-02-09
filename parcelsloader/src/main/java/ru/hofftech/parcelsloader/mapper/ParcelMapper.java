@@ -13,14 +13,14 @@ public class ParcelMapper {
 
     private static final String LINE_DELIMITER = "%n";
 
-    public Parcel toModel(ParcelEntity parcel) {
+    public Parcel entityToModel(ParcelEntity parcel) {
         return new Parcel(
                 parcel.getName(),
                 parcel.getSymbol(),
-                createFormMatrixFromString(parcel.getForm(), parcel.getSymbol()));
+                formToMatrix(parcel.getForm(), parcel.getSymbol()));
     }
 
-    private List<Character[]> createFormMatrixFromString(String form, Character symbol) {
+    public List<Character[]> formToMatrix(String form, Character symbol) {
         return collectLinesIntoMatrix(Arrays.stream(form.split(LINE_DELIMITER))
                 .toList()
                 .reversed(), symbol);

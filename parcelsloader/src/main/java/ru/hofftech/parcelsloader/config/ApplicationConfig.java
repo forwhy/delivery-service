@@ -5,25 +5,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import ru.hofftech.parcelsloader.factory.ParcelLoadingAlgorithmFactory;
 import ru.hofftech.parcelsloader.handler.CreateCommandHandler;
 import ru.hofftech.parcelsloader.handler.DeleteCommandHandler;
 import ru.hofftech.parcelsloader.handler.EditCommandHandler;
 import ru.hofftech.parcelsloader.handler.FindAllCommandHandler;
 import ru.hofftech.parcelsloader.handler.FindBillingHandler;
 import ru.hofftech.parcelsloader.handler.FindCommandHandler;
+import ru.hofftech.parcelsloader.handler.LoadCommandHandler;
 import ru.hofftech.parcelsloader.handler.UnloadCommandHandler;
+import ru.hofftech.parcelsloader.mapper.LoadTrucksCommandMapper;
 import ru.hofftech.parcelsloader.mapper.ParcelMapper;
 import ru.hofftech.parcelsloader.repository.BillingAuditRepository;
 import ru.hofftech.parcelsloader.repository.ParcelRepository;
 import ru.hofftech.parcelsloader.service.BillingService;
-import ru.hofftech.parcelsloader.service.UnpackingService;
+import ru.hofftech.parcelsloader.service.loading.LoadingResultExporter;
+import ru.hofftech.parcelsloader.service.loading.ParcelService;
+import ru.hofftech.parcelsloader.service.loading.ParcelsLoadingService;
+import ru.hofftech.parcelsloader.service.loading.TruckService;
 import ru.hofftech.parcelsloader.service.output.ParcelsExportingService;
+import ru.hofftech.parcelsloader.service.unloading.UnpackingService;
 import ru.hofftech.parcelsloader.service.validation.CreateParcelCommandValidator;
 import ru.hofftech.parcelsloader.service.validation.DeleteParcelCommandValidator;
 import ru.hofftech.parcelsloader.service.validation.EditParcelCommandValidator;
 import ru.hofftech.parcelsloader.service.validation.FindAllParcelCommandValidator;
 import ru.hofftech.parcelsloader.service.validation.FindBillingCommandValidator;
 import ru.hofftech.parcelsloader.service.validation.FindParcelCommandValidator;
+import ru.hofftech.parcelsloader.service.validation.LoadTrucksCommandValidator;
+import ru.hofftech.parcelsloader.service.validation.ParcelValidator;
 import ru.hofftech.parcelsloader.service.validation.UnloadTrucksCommandValidator;
 
 @Slf4j
@@ -42,13 +51,18 @@ public class ApplicationConfig {
 
     // Валидаторы
     @Bean
-    public CreateParcelCommandValidator createParcelCommandValidator() {
-        return new CreateParcelCommandValidator();
+    public ParcelValidator parcelValidator(ParcelMapper parcelMapper) {
+        return new ParcelValidator(parcelMapper);
     }
 
     @Bean
-    public EditParcelCommandValidator editParcelCommandValidator() {
-        return new EditParcelCommandValidator();
+    public CreateParcelCommandValidator createParcelCommandValidator(ParcelValidator parcelValidator) {
+        return new CreateParcelCommandValidator(parcelValidator);
+    }
+
+    @Bean
+    public EditParcelCommandValidator editParcelCommandValidator(ParcelValidator parcelValidator) {
+        return new EditParcelCommandValidator(parcelValidator);
     }
 
     @Bean
@@ -74,6 +88,11 @@ public class ApplicationConfig {
     @Bean
     public FindBillingCommandValidator findBillingCommandValidator() {
         return new FindBillingCommandValidator();
+    }
+
+    @Bean
+    public LoadTrucksCommandValidator loadTrucksCommandValidator() {
+        return new LoadTrucksCommandValidator();
     }
 
     // Сервисы
@@ -144,5 +163,31 @@ public class ApplicationConfig {
             FindBillingCommandValidator findBillingCommandValidator,
             BillingAuditRepository billingAuditRepository) {
         return new FindBillingHandler(findBillingCommandValidator, billingAuditRepository);
+    }
+
+    @Bean
+    public LoadCommandHandler loadCommandHandler(
+            LoadTrucksCommandValidator loadTrucksCommandValidator,
+            LoadTrucksCommandMapper loadTrucksCommandMapper,
+            ParcelService parcelService,
+            TruckService truckService,
+            ParcelsLoadingService parcelsLoadingService,
+            BillingService billingService,
+            LoadingResultExporter loadingResultExporter
+    ) {
+        return new LoadCommandHandler(
+                loadTrucksCommandValidator,
+                loadTrucksCommandMapper,
+                parcelService,
+                truckService,
+                parcelsLoadingService,
+                billingService,
+                loadingResultExporter);
+    }
+
+    // Фабрики
+    @Bean
+    public ParcelLoadingAlgorithmFactory packageLoadingAlgorithmFactory() {
+        return new ParcelLoadingAlgorithmFactory();
     }
 }

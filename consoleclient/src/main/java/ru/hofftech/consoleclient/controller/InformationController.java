@@ -37,9 +37,9 @@ public class InformationController {
                  Команда удаляет посылку по её названию.
                  Пример: /delete "Посылка Тип 4"
             
-            5.1) /load --u "почта@mail.ru" --parcels-text "Посылка 1%nПосылка 2" --trucks "3x3%n6x2" --type "Одна машина - Одна посылка" --out text
+            5.1) /load --u "почта@mail.ru" --parcels-text "Посылка Тип 1%nПосылка Тип 2" --trucks "3x3%n6x2" --type "Одна посылка - один грузовик" --out text
                  Команда для загрузки посылок с заданными размерами и стратегией в текстовом формате.
-            5.2) /load --u "почта@mail.ru" --parcels-file "Название_файла.txt" --trucks "3x3%n6x2" --type "Сначала широкие" --out json-file --out-filename "Название_файла_вывода.txt"
+            5.2) /load --u "почта@mail.ru" --parcels-file "parcels.csv" --trucks "3x3%n6x2" --type "Сначала широкие" --out json-file --out-filename "Название_файла_вывода.txt"
                  Команда для загрузки посылок с заданными размерами и стратегией в виде файлов.
             
             6) /unload --u "почта@mail.ru" --infile "trucks.json" --outfile "parcels.csv" --withcount

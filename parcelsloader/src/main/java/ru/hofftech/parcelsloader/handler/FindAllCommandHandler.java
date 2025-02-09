@@ -32,7 +32,7 @@ public class FindAllCommandHandler {
                             commandDto.offset().isEmpty() ? 0 : commandDto.offset().get());
 
             for (ParcelEntity parcel : parcels) {
-                result.append(parcelMapper.toModel(parcel));
+                result.append(parcelMapper.entityToModel(parcel));
             }
             return result.toString();
         } catch (Exception e) {

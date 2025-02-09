@@ -12,6 +12,7 @@ import java.util.List;
 @Repository
 public interface ParcelRepository extends JpaRepository<ParcelEntity, String> {
 
+    //@Query(value = "SELECT ")
     Optional<ParcelEntity> findByName(String name);
 
     @Query(value = "SELECT * FROM ParcelEntity LIMIT :limit OFFSET :offset", nativeQuery = true)

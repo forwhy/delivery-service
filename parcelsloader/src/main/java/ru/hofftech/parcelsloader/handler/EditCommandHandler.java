@@ -40,7 +40,7 @@ public class EditCommandHandler {
             parcel.setSymbol(commandDto.symbol().charAt(FIRST_SYMBOL_INDEX));
             parcel.setForm(commandDto.form());
             parcelRepository.save(parcel);
-            return parcelMapper.toModel(parcel).toString();
+            return parcelMapper.entityToModel(parcel).toString();
         }
         catch (Exception e) {
             log.error("Ошибка при попытке обновить посылку: {}", e.getMessage());

@@ -1,4 +1,4 @@
-package ru.hofftech.parcelsloader.service;
+package ru.hofftech.parcelsloader.service.unloading;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

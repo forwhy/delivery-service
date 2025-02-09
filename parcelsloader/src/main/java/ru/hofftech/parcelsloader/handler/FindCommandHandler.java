@@ -26,7 +26,7 @@ public class FindCommandHandler {
                 log.error("Попытка найти несуществующую посылку: {}", parcelName);
                 return String.format("Посылка с названием %s не найдена", parcelName);
             }
-            return parcelMapper.toModel(parcel.get()).toString();
+            return parcelMapper.entityToModel(parcel.get()).toString();
         } catch (Exception e) {
             log.error("Ошибка при попытке найти посылку: {}", e.getMessage());
             return String.format("Ошибка при попытке найти посылку: %s", e.getMessage());

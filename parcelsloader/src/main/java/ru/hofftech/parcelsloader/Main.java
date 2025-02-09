@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ParcelsLoaderApplication {
+public class Main {
 
     public static void main(String[] args) {
-        SpringApplication.run(ParcelsLoaderApplication.class, args);
+        SpringApplication.run(Main.class, args);
     }
 }

@@ -1,8 +1,10 @@
 package ru.hofftech.parcelsloader.mapper;
 
-import ru.hofftech.parcelsloader.model.dto.LoadedTruckDto;
+import org.springframework.stereotype.Component;
 import ru.hofftech.parcelsloader.model.Truck;
+import ru.hofftech.parcelsloader.model.dto.LoadedTruckDto;
 
+@Component
 public class TruckMapper {
 
     public LoadedTruckDto mapTruckToDto(Truck truck) {

@@ -32,7 +32,7 @@ public class CreateCommandHandler {
 
             ParcelEntity entity = parcelRepository.save(
                     new ParcelEntity(commandDto.name(), commandDto.symbol().charAt(FIRST_SYMBOL_INDEX), commandDto.form()));
-            Parcel newParcel = parcelMapper.toModel(entity);
+            Parcel newParcel = parcelMapper.entityToModel(entity);
 
             return newParcel.toString();
         } catch (Exception e) {
