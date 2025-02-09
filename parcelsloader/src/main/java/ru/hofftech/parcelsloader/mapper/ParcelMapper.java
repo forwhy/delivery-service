@@ -6,6 +6,7 @@ import ru.hofftech.parcelsloader.model.entity.ParcelEntity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 @Component
@@ -21,9 +22,13 @@ public class ParcelMapper {
     }
 
     public List<Character[]> formToMatrix(String form, Character symbol) {
-        return collectLinesIntoMatrix(Arrays.stream(form.split(LINE_DELIMITER))
-                .toList()
-                .reversed(), symbol);
+        return collectLinesIntoMatrix(
+                Arrays.stream(form.split(LINE_DELIMITER))
+                        .toList()
+                        .stream()
+                        .sorted(Comparator.reverseOrder())
+                        .toList(),
+                symbol);
     }
 
     private List<Character[]> collectLinesIntoMatrix(List<String> formLines, Character symbol) {

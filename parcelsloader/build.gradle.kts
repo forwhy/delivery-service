@@ -35,7 +35,7 @@ object Version {
 
 plugins {
     id("java")
-    id("com.diffplug.spotless") version "6.23.3"
+    id("com.diffplug.spotless") version "6.19.0"
     id("org.springframework.boot") version "3.1.4"
     id("io.spring.dependency-management") version "1.1.7"
 }
