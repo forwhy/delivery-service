@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class BillingCommandParser {
 
-    private static final String COMMAND_PATTERN = "/billing \"([^\"]+)\"";
+    private static final String COMMAND_PATTERN = "/billing --u \"([^\"]+)\"";
     private static final Integer USER_INDEX = 1;
     private final BillingCommandValidator billingCommandValidator;
 

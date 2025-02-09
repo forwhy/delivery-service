@@ -1,26 +1,38 @@
 {
-    "trucks": [
-  {
-    "truckType": "3x3",
-    "parcels": [
-      {
-        "name": "Посылка Тип 3",
-        "volume": 3,
-        "startRow": 0,
-        "startColumn": 0
-      },
-      {
-        "name": "Посылка Тип 1",
-        "volume": 1,
-        "startRow": 1,
-        "startColumn": 0
-      },
-      {
-        "name": "Посылка Тип 2",
-        "volume": 2,
-        "startRow": 1,
-        "startColumn": 1
-      }
-    ]
-  }
-]}
+  "trucks": [
+    {
+      "truckType": "3x3",
+      "parcels": [
+        {
+          "name": "Посылка Тип 3",
+          "volume": 3,
+          "startRow": 0,
+          "startColumn": 0
+        },
+        {
+          "name": "Посылка Тип 1",
+          "volume": 1,
+          "startRow": 1,
+          "startColumn": 0
+        },
+        {
+          "name": "Посылка Тип 2",
+          "volume": 2,
+          "startRow": 1,
+          "startColumn": 1
+        }
+      ]
+    },
+    {
+      "truckType": "3x3",
+      "parcels": [
+        {
+          "name": "Холодильник ver 2.0",
+          "volume": 9,
+          "startRow": 0,
+          "startColumn": 0
+        }
+      ]
+    }
+  ]
+}

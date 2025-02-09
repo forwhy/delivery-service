@@ -21,6 +21,10 @@ public class FindBillingHandler {
             findBillingCommandValidator.validate(user);
             List<BillingAuditEntity> billingAuditEntities = billingAuditRepository.findByUser(user);
 
+            if (billingAuditEntities.isEmpty()) {
+                return String.format("Пока нет счетов для пользователя %s", user);
+            }
+
             return collectReport(billingAuditEntities);
         } catch (Exception e) {
             log.error("Ошибка при попытке получить квитанции пользователя: {}", e.getMessage());
