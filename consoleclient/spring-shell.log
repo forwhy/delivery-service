@@ -1,0 +1,43 @@
+1738857833533:/load --u "почта@mail.ru" --parcels-text "Посылка 1%nПосылка 2" --trucks "3x3%n6x2" --type "Одна машина - Одна посылка" --out text
+1738939464601:/help
+1738939508355:/create --name "Тест" --form "xx%nxx%nxx" --symbol "F"
+1738939555107:/find "Тест"
+1738939600653:/edit "Тест" --name "новый тест" --form "xx%nmm" --symbol "O"
+1738939697672:/delete "Тест"
+1738939708428:/find "Посылка Тип 9"
+1738970520352:/unload --u "почта@mail.ru" --infile "trucks.json" --outfile "parcels.csv" --withcount
+1738973452820:/billing --u "почта@mail.ru"
+1738973502225:/find "Посылка Тип 9"
+1739052073991:/load --u "почта@mail.ru" --parcels-text "Посылка 1%nПосылка 2" --trucks "3x3%n6x2" --type "Одна машина - Одна посылка" --out text
+1739052210776:/load --u "почта@mail.ru" --parcels-text "Посылка 1%nПосылка 2" --trucks "3x3%n6x2" --type "Одна посылка - один грузовик" --out text
+1739054628378:/load --u "почта@mail.ru" --parcels-text "Посылка Тип 1%nПосылка Тип 2" --trucks "3x3%n6x2" --type "Одна посылка - один грузовик" --out text
+1739054950118:/load --u "почта@mail.ru" --parcels-file "Название_файла.txt" --trucks "3x3%n6x2" --type "Сначала широкие" --out json-file --out-filename "parcels.csv"
+1739055070492:/load --u "почта@mail.ru" --parcels-file "parcels.csv" --trucks "3x3%n6x2" --type "Сначала широкие" --out json-file --out-filename "parcels.csv"
+1739059336214:/load --u "почта@mail.ru" --parcels-file "parcels.csv" --trucks "3x3%n6x2" --type "Сначала широкие" --out json-file --out-filename "parcels1.csv"
+1739061499602:/load --u "почта@mail.ru" --parcels-text "Посылка Тип 1%nПосылка Тип 2" --trucks "3x3%n6x2" --type "Одна посылка - один грузовик" --out text
+1739061610480:/load --u "почта@mail.ru" --parcels-file "parcels.csv" --trucks "3x3%n6x2" --type "Сначала широкие" --out json-file --out-filename "Название_файла_вывода.txt"
+1739081789144:/edit "Холодильник" --name "Холодильник ver 2.0" --form "xxx%nxxx%nxxx" --symbol "T"
+1739081988668:/create --name "Холодильник" --form "xxx%nxxx%nxxx" --symbol "П"
+1739081994976:/edit "Холодильник" --name "Холодильник ver 2.0" --form "xxx%nxxx%nxxx" --symbol "T"
+1739082294895:/create --name "Холодильник" --form "xxx%nxxx%nxxx" --symbol "П"
+1739082304333:/edit "Холодильник" --name "Холодильник ver 2.0" --form "xxx%nxxx%nxxx" --symbol "T"
+1739082865543:/create --name "Холодильник" --form "xxx%nxxx%nxxx" --symbol "П"
+1739082871827:/edit "Холодильник" --name "Холодильник ver 2.0" --form "xxx%nxxx%nxxx" --symbol "T"
+1739082897804:/delete "Холодильник ver 2.0"
+1739082984045:/edit "Холодильник" --name "Холодильник ver 2.0" --form "xxx%nxxx%nxxx" --symbol "T"
+1739082990432:/find-all
+1739083498525:/edit "Холодильник" --name "Холодильник ver 2.0" --form "xxx%nxxx%nxxx" --symbol "T"
+1739083511090:/find-all
+1739083631549:/edit "Холодильник" --name "Холодильник ver 2.0" --form "xxx%nxxx%nxxx" --symbol "T"
+1739083635580:/find-all
+1739083903545:/find-al
+1739083907709:/find-all
+1739083914567:/edit "Холодильник" --name "Холодильник ver 2.0" --form "xxx%nxxx%nxxx" --symbol "T"
+1739083918858:/find-all
+1739084026148:/unload --u "почта@mail.ru" --infile "trucks.json" --outfile "parcels_out.csv" --withcount
+1739084220697:/edit "Холодильник" --name "Холодильник ver 2.0" --form "xxx%nxxx%nxxx" --symbol "T"
+1739084319746:/unload --u "почта@mail.ru" --infile "trucks.json" --outfile "parcels_out.csv" --withcount
+1739084446053:/find-all
+1739084451246:/edit "Холодильник" --name "Холодильник ver 2.0" --form "xxx%nxxx%nxxx" --symbol "T"
+1739084558748:/unload --u "почта@mail.ru" --infile "trucks.json" --outfile "parcels_out.csv" --withcount
+1739084597275:/billing --u "почта@mail.ru"

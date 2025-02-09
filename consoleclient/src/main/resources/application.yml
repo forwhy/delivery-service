@@ -1,0 +1,11 @@
+spring:
+  shell:
+    interactive:
+      enabled: true
+
+server:
+  port: 8081
+
+services:
+  parcels-loader:
+    url: http://localhost:8080

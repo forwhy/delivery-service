@@ -1,0 +1,11 @@
+telegram:
+  credentials:
+    username: "parcelsLoaderBot"
+    token: "7352587303:AAEBeK3PLpzyoylV22783clG6nHDQ8_fbdM"
+
+server:
+  port: 8082
+
+services:
+  url:
+    parcels-loader: http://localhost:8080

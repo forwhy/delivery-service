@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/delivery_db?currentSchema=prcls
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    open-in-view: false
+
+server:
+  port: 8080
+
+billing:
+  price:
+    loading: 80
+    unloading: 50
+
+parcels:
+  paging:
+    default-limit: 20
