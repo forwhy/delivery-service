@@ -13,6 +13,7 @@ public enum CommandType {
     DELETE_PARCEL("/delete"),
     LOAD_PARCELS("/load"),
     UNLOAD_PARCELS("/unload"),
+    BILLING("/billing"),
     HELP("/help");
 
     private final String commandKeyWord;

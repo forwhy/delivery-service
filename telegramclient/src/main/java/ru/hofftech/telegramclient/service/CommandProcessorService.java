@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.hofftech.telegramclient.enums.CommandType;
 import ru.hofftech.telegramclient.model.record.EditParcelCommand;
+import ru.hofftech.telegramclient.service.command.BillingCommandParser;
 import ru.hofftech.telegramclient.service.command.CommandRecognizer;
 import ru.hofftech.telegramclient.service.command.CreateCommandParser;
 import ru.hofftech.telegramclient.service.command.DeleteCommandParser;
@@ -28,6 +29,7 @@ public class CommandProcessorService {
     private final LoadCommandParser loadCommandParser;
     private final UnloadCommandParser unloadCommandParser;
     private final ParcelsLoaderClient parcelsLoaderClient;
+    private final BillingCommandParser billingCommandParser;
 
     public String processCommandText(String command) {
         try {
@@ -50,6 +52,7 @@ public class CommandProcessorService {
                     parcelsLoaderClient.load(loadCommandParser.parse(command));
                 case CommandType.UNLOAD_PARCELS ->
                     parcelsLoaderClient.unload(unloadCommandParser.parse(command));
+                case CommandType.BILLING -> parcelsLoaderClient.findByUser(billingCommandParser.parse(command));
                 case CommandType.HELP -> HELP_TEXT;
             };
         } catch (Exception e) {
