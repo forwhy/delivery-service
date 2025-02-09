@@ -1,5 +1,6 @@
 CREATE TABLE parcel (
-     name       VARCHAR(255) NOT NULL PRIMARY KEY,
+     id         SERIAL PRIMARY KEY,
+     name       VARCHAR(255) NOT NULL,
      symbol     CHAR(1),
      form       VARCHAR(1000)
 );

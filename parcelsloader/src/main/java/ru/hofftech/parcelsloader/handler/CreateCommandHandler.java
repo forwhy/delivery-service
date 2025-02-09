@@ -30,8 +30,10 @@ public class CreateCommandHandler {
                 return String.format("Посылка с таким названием уже существует: %s", commandDto.name());
             }
 
-            ParcelEntity entity = parcelRepository.save(
-                    new ParcelEntity(commandDto.name(), commandDto.symbol().charAt(FIRST_SYMBOL_INDEX), commandDto.form()));
+            ParcelEntity entity = parcelRepository.save(new ParcelEntity(
+                            commandDto.name(),
+                            commandDto.symbol().charAt(FIRST_SYMBOL_INDEX),
+                            commandDto.form()));
             Parcel newParcel = parcelMapper.entityToModel(entity);
 
             return newParcel.toString();

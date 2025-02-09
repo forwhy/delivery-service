@@ -1,0 +1,60 @@
+services:
+  postgres:
+    image: postgres
+    container_name: delivery_db_container
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=delivery_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - spring-rest-client
+
+  parcelsloader:
+    build:
+      context: ./parcelsloader
+    container_name: parcelsloader
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/delivery_db?currentSchema=prcls
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    ports:
+      - "8080:8080"
+    networks:
+      - spring-rest-client
+    depends_on:
+      - postgres
+
+  consoleclient:
+    build:
+      context: ./consoleclient
+    container_name: consoleclient
+    ports:
+      - "8081:8081"
+    environment:
+      SERVICES_PARCELSLOADER_URL: "http://parcelsloader:8080"
+    networks:
+      - spring-rest-client
+    depends_on:
+      - parcelsloader
+
+  telegramclient:
+    build:
+      context: ./telegramclient
+    container_name: telegramclient
+    environment:
+      SERVICES_PARCELSLOADER_URL: "http://parcelsloader:8080"
+    env_file:
+      - telegramclient/cred.env
+    ports:
+      - "8082:8082"
+    networks:
+      - spring-rest-client
+    depends_on:
+      - parcelsloader
+
+networks:
+  spring-rest-client:
+    driver: bridge

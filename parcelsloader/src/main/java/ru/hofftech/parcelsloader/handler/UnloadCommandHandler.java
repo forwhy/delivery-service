@@ -34,7 +34,7 @@ public class UnloadCommandHandler {
                     Operation.UNLOAD_PARCELS,
                     trucks.size(),
                     parcels);
-            parcelsExportingService.exportParcelsToFile(parcels, commandDto.withCount());
+            parcelsExportingService.exportParcelsToFile(parcels, commandDto.targetFileName(), commandDto.withCount());
 
             return String.format("Выгрузка завершена. Результат сохранён в файл: %s", commandDto.targetFileName());
         } catch (Exception e) {

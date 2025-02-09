@@ -44,6 +44,8 @@ public class CommandProcessorService {
                 }
                 case CommandType.FIND_PARCEL ->
                     parcelsLoaderClient.findParcel(findCommandParser.parse(command));
+                case CommandType.FIND_ALL_PARCELS ->
+                    parcelsLoaderClient.findAll();
                 case CommandType.LOAD_PARCELS ->
                     parcelsLoaderClient.load(loadCommandParser.parse(command));
                 case CommandType.UNLOAD_PARCELS ->

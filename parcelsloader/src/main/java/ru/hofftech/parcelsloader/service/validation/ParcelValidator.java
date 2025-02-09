@@ -22,7 +22,7 @@ public class ParcelValidator {
     private Boolean isFormMatrixValid(List<Character[]> formMatrix) {
         for (int rowCount = formMatrix.size() - 1; rowCount > 0; rowCount--) {
             Character[] currentRow = formMatrix.get(rowCount);
-            Character[] previousRow = formMatrix.get(rowCount + 1);
+            Character[] previousRow = formMatrix.get(rowCount - 1);
 
             for (int j = 0; j < currentRow.length; j++) {
                 if (currentRow[j] == PARCEL_EXAMPLE_SYMBOL) {

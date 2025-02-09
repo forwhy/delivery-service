@@ -2,6 +2,7 @@ package ru.hofftech.parcelsloader.handler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 import ru.hofftech.parcelsloader.mapper.ParcelMapper;
 import ru.hofftech.parcelsloader.model.dto.request.EditParcelCommandDto;
 import ru.hofftech.parcelsloader.model.entity.ParcelEntity;
@@ -19,6 +20,7 @@ public class EditCommandHandler {
     private final ParcelRepository parcelRepository;
     private final ParcelMapper parcelMapper;
 
+    @Transactional
     public String executeCommand(EditParcelCommandDto commandDto) {
         try {
             editParcelCommandValidator.validate(commandDto);

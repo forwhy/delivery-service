@@ -22,7 +22,7 @@ public class ApplicationConfig {
     @Value("${telegram.credentials.token}")
     private String botToken;
 
-    @Value("${services.url.parcels-loader}")
+    @Value("${services.parcels-loader.url}")
     private String parcelsLoaderUrl;
 
     @Bean

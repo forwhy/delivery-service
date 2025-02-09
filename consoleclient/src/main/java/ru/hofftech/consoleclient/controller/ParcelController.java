@@ -27,6 +27,11 @@ public class ParcelController {
         return parcelsLoaderClient.findParcel(name);
     }
 
+    @ShellMethod(key = "/find-all", value = "Получить все посылки.")
+    public String find() {
+        return parcelsLoaderClient.findAll();
+    }
+
     @ShellMethod(key = "/edit", value = "Редактировать посылку.")
     public String edit(
             @ShellOption String id,

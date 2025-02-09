@@ -18,6 +18,9 @@ public interface ParcelsLoaderClient {
     @GetExchange("/api/v1/parcels/{parcelId}")
     String findParcel(@PathVariable String parcelId);
 
+    @GetExchange("/api/v1/parcels")
+    String findAll();
+
     @PutExchange("/api/v1/parcels/{parcelId}")
     String updateParcel(@PathVariable String parcelId,
                         @RequestBody CreateParcelCommand command);
@@ -30,4 +33,7 @@ public interface ParcelsLoaderClient {
 
     @PostExchange("/api/v1/delivery/unloading")
     String unload(@RequestBody UnloadTrucksCommand command);
+
+    @GetExchange("/api/v1/billing/{user}")
+    String findByUser(@PathVariable String user);
 }

@@ -16,17 +16,16 @@ import java.util.stream.Collectors;
 @Service
 public class ParcelsExportingService {
 
-    private static final String OUTPUT_FILE_NAME = "parcels.csv";
     private static final String ROW_SEPARATOR = ";";
 
-    public void exportParcelsToFile(List<PlacedParcelDto> parcels, Boolean withCount) {
-        log.info("Экспорт в файл {} начат...", OUTPUT_FILE_NAME);
+    public void exportParcelsToFile(List<PlacedParcelDto> parcels, String outFileName, Boolean withCount) {
+        log.info("Экспорт в файл {} начат...", outFileName);
 
-        try (FileWriter writer = new FileWriter(OUTPUT_FILE_NAME)) {
+        try (FileWriter writer = new FileWriter(outFileName)) {
             writer.write(withCount
                     ? collectStringFromParcelsWithCount(parcels)
                     : collectStringFromParcels(parcels));
-            log.info("Экспорт посылок в файл {} завершён.", OUTPUT_FILE_NAME);
+            log.info("Экспорт посылок в файл {} завершён.", outFileName);
         } catch (IOException e) {
             throw new ExportToCsvFileException(e.getMessage());
         }

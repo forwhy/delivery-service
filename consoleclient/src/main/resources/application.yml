@@ -7,5 +7,5 @@ server:
   port: 8081
 
 services:
-  url:
-    parcels-loader: http://localhost:8080
+  parcels-loader:
+    url: http://localhost:8080

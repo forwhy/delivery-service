@@ -13,7 +13,7 @@ import ru.hofftech.consoleclient.service.ParcelsLoaderClient;
 @Configuration
 public class ApplicationConfig {
 
-    @Value("${services.url.parcels-loader}")
+    @Value("${services.parcels-loader.url}")
     private String parcelsLoaderUrl;
 
     @Bean

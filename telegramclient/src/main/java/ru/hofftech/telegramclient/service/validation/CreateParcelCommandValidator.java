@@ -29,10 +29,6 @@ public class CreateParcelCommandValidator {
         if (form == null || form.isEmpty()) {
             throw new IllegalArgumentException("Не указано значение параметра form");
         }
-
-        if (!Pattern.matches(getAllowedCharactersPattern(symbol), form)) {
-            throw new IllegalArgumentException("Форма посылки содержит невалидные символы");
-        }
     }
 
     private void validateSymbol(String symbol) {

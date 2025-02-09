@@ -10,12 +10,11 @@ import java.util.Optional;
 import java.util.List;
 
 @Repository
-public interface ParcelRepository extends JpaRepository<ParcelEntity, String> {
+public interface ParcelRepository extends JpaRepository<ParcelEntity, Long> {
 
-    //@Query(value = "SELECT ")
     Optional<ParcelEntity> findByName(String name);
 
-    @Query(value = "SELECT * FROM ParcelEntity LIMIT :limit OFFSET :offset", nativeQuery = true)
+    @Query(value = "SELECT * FROM parcel LIMIT :limit OFFSET :offset", nativeQuery = true)
     List<ParcelEntity> findAllWithLimitAndOffset(@Param("limit") Long limit,
                                                  @Param("offset") Long offset);
 }

@@ -24,8 +24,12 @@ public class InformationController {
             2) /find "Название посылки"
                  Команда ищет посылку по названию и отображает информацию о ней.
                  Пример: /find "Посылка Тип 1"
+                 
+            3) /find-all
+                 Команда отображает информацию по всем допустимым посылкам.
+                 Пример: /find-all
             
-            3) /edit "Старое имя" --name "Новое имя" --form "новая форма" --symbol "новый символ"
+            4) /edit "Старое имя" --name "Новое имя" --form "новая форма" --symbol "новый символ"
                  Команда редактирует посылку с указанным именем.
                  Пример: /edit "Квадратное колесо" --name "КУБ" --form "xxx%nxxx%nxxx" -symbol "%"
                  В результате Квадратное колесо будет заменено посылкой КУБ вида:
@@ -33,20 +37,20 @@ public class InformationController {
                  %%%
                  %%%
             
-            4) /delete "Название посылки"
+            5) /delete "Название посылки"
                  Команда удаляет посылку по её названию.
                  Пример: /delete "Посылка Тип 4"
             
-            5.1) /load --u "почта@mail.ru" --parcels-text "Посылка Тип 1%nПосылка Тип 2" --trucks "3x3%n6x2" --type "Одна посылка - один грузовик" --out text
+            6.1) /load --u "почта@mail.ru" --parcels-text "Посылка Тип 1%nПосылка Тип 2" --trucks "3x3%n6x2" --type "Одна посылка - один грузовик" --out text
                  Команда для загрузки посылок с заданными размерами и стратегией в текстовом формате.
-            5.2) /load --u "почта@mail.ru" --parcels-file "parcels.csv" --trucks "3x3%n6x2" --type "Сначала широкие" --out json-file --out-filename "Название_файла_вывода.txt"
-                 Команда для загрузки посылок с заданными размерами и стратегией в виде файлов.
+            6.2) /load --u "почта@mail.ru" --parcels-file "parcels.csv" --trucks "3x3%n6x2" --type "Сначала широкие" --out json-file --out-filename "Название_файла_вывода"
+                 Команда для загрузки посылок с заданными размерами и стратегией в виде файлов. Файл для вывода указывается без расширения (всегда json)
             
-            6) /unload --u "почта@mail.ru" --infile "trucks.json" --outfile "parcels.csv" --withcount
+            7) /unload --u "почта@mail.ru" --infile "trucks.json" --outfile "parcels.csv" --withcount
                  Команда выгружает посылки из файла с подсчетом количества (опционально).
                  Пример: /unload --u "почта@mail.ru" --infile "trucks.json" --outfile "parcels-with-count.csv" --withcount
 
-            7) /billing --u "почта@mail.ru"
+            8) /billing --u "почта@mail.ru"
                  Команда отображает квитанции пользователя по его имени
                  Пример: /billing --u "почта@mail.ru"
             """;

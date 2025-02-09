@@ -5,6 +5,7 @@ import ru.hofftech.parcelsloader.model.dto.request.LoadTrucksCommandDto;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 
 public class LoadTrucksCommandValidator {
 
@@ -23,12 +24,12 @@ public class LoadTrucksCommandValidator {
         }
     }
 
-    private void validateParcelsSource(String parcelsText, String parcelsFile) {
-        if (isStringParameterProvided(parcelsText) && isStringParameterProvided(parcelsFile)) {
+    private void validateParcelsSource(Optional<String> parcelsText, Optional<String> parcelsFile) {
+        if (parcelsText.isPresent() && parcelsFile.isPresent()) {
             throw new IllegalArgumentException("Должен быть задан ровно один источник информации о посылках " +
                     "(-parcels-text ИЛИ -parcels-file)");
         }
-        if (!isStringParameterProvided(parcelsText) && !isStringParameterProvided(parcelsFile)) {
+        if (parcelsText.isEmpty()&& parcelsFile.isEmpty()) {
             throw new IllegalArgumentException("Не задан источник информации о посылках (-parcels-text или -parcels-file)");
         }
     }
@@ -43,8 +44,8 @@ public class LoadTrucksCommandValidator {
         }
     }
 
-    private void validateOutputParameters(String outType, String outFile) {
-        if (Objects.equals(outType, "json-file") && !isStringParameterProvided(outFile)) {
+    private void validateOutputParameters(String outType, Optional<String> outFile) {
+        if (Objects.equals(outType, "json-file") && outFile.isEmpty()) {
             throw new IllegalArgumentException("Не указано имя файла для вывода результата -out-filename");
         }
     }

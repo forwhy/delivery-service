@@ -9,7 +9,6 @@ import ru.hofftech.parcelsloader.model.record.LoadTrucksCommand;
 import ru.hofftech.parcelsloader.model.record.TruckOptions;
 
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.List;
 
 @Component
@@ -32,11 +31,13 @@ public class LoadTrucksCommandMapper {
         return new LoadTrucksCommand(
                 loadTrucksCommandDto.user(),
                 inputMode,
-                inputMode == LoadInputMode.TEXT ? loadTrucksCommandDto.parcelsText() : loadTrucksCommandDto.parcelsFile(),
+                inputMode == LoadInputMode.TEXT
+                        ? loadTrucksCommandDto.parcelsText().get()
+                        : loadTrucksCommandDto.parcelsFile().get(),
                 parseTruckOptions(loadTrucksCommandDto.trucks()),
                 loadingAlgorithmMapper.mapNameToLoadingAlgorithm(loadTrucksCommandDto.type()),
                 defineLoadOutputMode(loadTrucksCommandDto.out()),
-                Optional.ofNullable(loadTrucksCommandDto.outFilename()));
+                loadTrucksCommandDto.outFilename());
     }
 
     private List<TruckOptions> parseTruckOptions(String truckVariants) {

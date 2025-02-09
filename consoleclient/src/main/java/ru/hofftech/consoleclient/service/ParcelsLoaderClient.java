@@ -18,6 +18,9 @@ public interface ParcelsLoaderClient {
     @GetExchange("/api/v1/parcels/{parcelId}")
     String findParcel(@PathVariable String parcelId);
 
+    @GetExchange("/api/v1/parcels")
+    String findAll();
+
     @PutExchange("/api/v1/parcels/{parcelId}")
     String updateParcel(@PathVariable String parcelId,
                         @RequestBody CreateParcelCommand command);
