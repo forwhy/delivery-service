@@ -11,7 +11,7 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import ru.hofftech.deliveryservice.parcelsloader.model.dto.OutboxDto;
-import ru.hofftech.deliveryservice.parcelsloader.service.KafkaSenderService;
+import ru.hofftech.deliveryservice.parcelsloader.messaging.KafkaSenderService;
 
 import java.util.HashMap;
 import java.util.Map;

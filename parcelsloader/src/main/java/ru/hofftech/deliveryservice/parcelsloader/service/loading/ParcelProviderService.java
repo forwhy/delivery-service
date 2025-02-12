@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ParcelService {
+public class ParcelProviderService {
 
     private static final String PARCEL_NAMES_DELIMITER = "%n";
     private final FileReader fileReader;

@@ -1,10 +1,11 @@
-package ru.hofftech.deliveryservice.billing.service;
+package ru.hofftech.deliveryservice.billing.messaging;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import ru.hofftech.deliveryservice.billing.model.dto.InboxDto;
+import ru.hofftech.deliveryservice.billing.service.BillingService;
 
 /**
  * Класс для прослушивания Kafka и обработки поступающих сообщений

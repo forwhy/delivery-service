@@ -6,7 +6,7 @@ import ru.hofftech.deliveryservice.parcelsloader.exception.TrucksOverflowExcepti
 import ru.hofftech.deliveryservice.parcelsloader.model.MatrixPosition;
 import ru.hofftech.deliveryservice.parcelsloader.model.Parcel;
 import ru.hofftech.deliveryservice.parcelsloader.model.Truck;
-import ru.hofftech.deliveryservice.parcelsloader.model.dto.TruckOptionsDto;
+import ru.hofftech.deliveryservice.parcelsloader.model.dto.TruckOptions;
 import ru.hofftech.deliveryservice.parcelsloader.service.algorithm.ParcelLoadingAlgorithm;
 import ru.hofftech.deliveryservice.parcelsloader.service.loading.TrucksConstructor;
 
@@ -21,7 +21,7 @@ public class SingleParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
     private static final Integer PARCEL_START_COLUMN_NUMBER = 0;
 
     @Override
-    public List<Truck> loadTrucks(List<Parcel> parcels, List<TruckOptionsDto> truckOptions) {
+    public List<Truck> loadTrucks(List<Parcel> parcels, List<TruckOptions> truckOptions) {
         List<Truck> trucks = TrucksConstructor.createTrucks(truckOptions);
         validateTrucksCount(trucks.size(), parcels.size());
         parcels.sort(Comparator.comparingInt(Parcel::getVolume).reversed());

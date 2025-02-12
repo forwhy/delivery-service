@@ -6,7 +6,7 @@ import ru.hofftech.deliveryservice.parcelsloader.exception.InvalidAttemptToPutPa
 import ru.hofftech.deliveryservice.parcelsloader.model.MatrixPosition;
 import ru.hofftech.deliveryservice.parcelsloader.model.Parcel;
 import ru.hofftech.deliveryservice.parcelsloader.model.Truck;
-import ru.hofftech.deliveryservice.parcelsloader.model.dto.TruckOptionsDto;
+import ru.hofftech.deliveryservice.parcelsloader.model.dto.TruckOptions;
 import ru.hofftech.deliveryservice.parcelsloader.service.algorithm.ParcelLoadingAlgorithm;
 import ru.hofftech.deliveryservice.parcelsloader.service.loading.TrucksConstructor;
 
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class WideParcelFirstLoadingAlgorithm implements ParcelLoadingAlgorithm {
 
     @Override
-    public List<Truck> loadTrucks(List<Parcel> parcels, List<TruckOptionsDto> truckOptions) {
+    public List<Truck> loadTrucks(List<Parcel> parcels, List<TruckOptions> truckOptions) {
         List<Truck> trucks = TrucksConstructor.createTrucks(truckOptions);
         parcels.sort(Comparator.comparingInt(Parcel::getWidth).reversed());
         for (var parcel : parcels) {

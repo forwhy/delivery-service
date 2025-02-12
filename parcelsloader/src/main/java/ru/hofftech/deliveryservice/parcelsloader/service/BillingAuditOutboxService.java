@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.hofftech.deliveryservice.parcelsloader.enums.BillingAuditOutboxStatus;
 import ru.hofftech.deliveryservice.parcelsloader.mapper.BillingAuditMapper;
+import ru.hofftech.deliveryservice.parcelsloader.messaging.KafkaSenderService;
 import ru.hofftech.deliveryservice.parcelsloader.model.entity.BillingAuditOutboxEntity;
 import ru.hofftech.deliveryservice.parcelsloader.repository.BillingAuditOutboxRepository;
 

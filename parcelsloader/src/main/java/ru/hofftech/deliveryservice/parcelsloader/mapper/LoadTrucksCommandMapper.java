@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.hofftech.deliveryservice.parcelsloader.enums.LoadInputMode;
 import ru.hofftech.deliveryservice.parcelsloader.enums.LoadOutputMode;
-import ru.hofftech.deliveryservice.parcelsloader.model.dto.LoadTrucksCommandDto;
-import ru.hofftech.deliveryservice.parcelsloader.model.dto.TruckOptionsDto;
+import ru.hofftech.deliveryservice.parcelsloader.model.dto.LoadTrucksOptions;
+import ru.hofftech.deliveryservice.parcelsloader.model.dto.TruckOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,12 +22,12 @@ public class LoadTrucksCommandMapper {
     private static final String OUT_FILE_FORMAT = "json-file";
     private final LoadingAlgorithmMapper loadingAlgorithmMapper;
 
-    public LoadTrucksCommandDto toLoadTrucksCommand(ru.hofftech.deliveryservice.parcelsloader.model.dto.request.LoadTrucksCommandDto loadTrucksCommandDto) {
+    public LoadTrucksOptions toLoadTrucksCommand(ru.hofftech.deliveryservice.parcelsloader.model.dto.request.LoadTrucksCommandDto loadTrucksCommandDto) {
         LoadInputMode inputMode = isStringParameterDefined(loadTrucksCommandDto.parcelsText())
                 ? LoadInputMode.TEXT
                 : LoadInputMode.FILE;
 
-        return new LoadTrucksCommandDto(
+        return new LoadTrucksOptions(
                 loadTrucksCommandDto.user(),
                 inputMode,
                 inputMode == LoadInputMode.TEXT
@@ -43,8 +43,8 @@ public class LoadTrucksCommandMapper {
         return parameter != null && !parameter.isEmpty();
     }
 
-    private List<TruckOptionsDto> parseTruckOptions(String truckVariants) {
-        List<TruckOptionsDto> truckOptionDtos = new ArrayList<>();
+    private List<TruckOptions> parseTruckOptions(String truckVariants) {
+        List<TruckOptions> truckOptionDtos = new ArrayList<>();
         String[] truckOptionStrings = truckVariants.split(TRUCK_OPTIONS_DELIMITER);
 
         for (String truckOptionString : truckOptionStrings) {
@@ -54,7 +54,7 @@ public class LoadTrucksCommandMapper {
         return truckOptionDtos;
     }
 
-    private TruckOptionsDto extractTruckOptions(String truckOptionString) {
+    private TruckOptions extractTruckOptions(String truckOptionString) {
         String[] truckDimension = truckOptionString.split(
                 String.format("[%s%s]",
                         TRUCK_HEIGHT_WIDTH_SEPARATOR_EN,
@@ -62,7 +62,7 @@ public class LoadTrucksCommandMapper {
         try {
             Integer width = Integer.parseInt(truckDimension[TRUCK_WIDTH_INDEX].trim());
             Integer height = Integer.parseInt(truckDimension[TRUCK_HEIGHT_INDEX].trim());
-            return new TruckOptionsDto(height, width);
+            return new TruckOptions(height, width);
         } catch (RuntimeException e) {
             throw new IllegalArgumentException(
                     String.format("Ошибка при разборе размера грузовика %s: %s",

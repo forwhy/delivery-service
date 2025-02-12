@@ -29,11 +29,11 @@ public class ParcelService {
      */
     public ParcelDto createParcel(CreateParcelCommandDto createParcelCommandDto) {
         Optional<ParcelEntity> existingParcel = parcelRepository.findByName(createParcelCommandDto.name());
-        if (existingParcel.isPresent()) {
+        existingParcel.ifPresent(parcel -> {
             log.error("Попытка создать уже существующую посылку: {}", createParcelCommandDto.name());
             throw new ParcelNameConstraintViolationException(
                     String.format("Попытка создать уже существующую посылку: %s", createParcelCommandDto.name()));
-        }
+        });
 
         ParcelEntity parcelEntity = ParcelDtoMapper.INSTANCE.toEntity(createParcelCommandDto);
         return ParcelDtoMapper.INSTANCE.toDto(parcelRepository.save(parcelEntity));
@@ -67,6 +67,12 @@ public class ParcelService {
         return ParcelDtoMapper.INSTANCE.toDtoList(parcels);
     }
 
+    /**
+     * Редактирует посылку, если она существует
+     * @param originalParcelName Название посылки для редактирования
+     * @param editParcelCommandDto Новые данные о посылке
+     * @return Обновлённая посылка
+     */
     public ParcelDto editParcel(String originalParcelName, EditParcelCommandDto editParcelCommandDto) {
         ParcelEntity parcel = parcelRepository.findByName(originalParcelName)
                 .orElseThrow(() -> {
@@ -86,6 +92,10 @@ public class ParcelService {
         return ParcelDtoMapper.INSTANCE.toDto(parcel);
     }
 
+    /**
+     * Удаляет посылку, если она существует
+     * @param parcelName Название посылки для удаления
+     */
     public void deleteParcel(String parcelName) {
         ParcelEntity parcel = parcelRepository.findByName(parcelName)
                 .orElseThrow(() -> {

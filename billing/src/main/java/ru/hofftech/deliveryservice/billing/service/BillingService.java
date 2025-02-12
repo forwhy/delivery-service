@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hofftech.deliveryservice.billing.config.property.BillingProperties;
 import ru.hofftech.deliveryservice.billing.enums.Operation;
+import ru.hofftech.deliveryservice.billing.exception.FetchingBillingAuditException;
 import ru.hofftech.deliveryservice.billing.mapper.BillingAuditMapper;
 import ru.hofftech.deliveryservice.billing.model.dto.BillingAuditDto;
 import ru.hofftech.deliveryservice.billing.model.dto.BillingAuditResponseDto;
@@ -64,7 +65,10 @@ public class BillingService {
             return collectReport(billingAuditEntities);
         } catch (Exception e) {
             log.error("Ошибка при попытке получить счета пользователя по логину: {}", e.getMessage());
-            throw e;
+            throw new FetchingBillingAuditException(
+                    String.format(
+                            "Ошибка при попытке получить счета пользователя по логину: %s",
+                            e.getMessage()));
         }
     }
 
@@ -86,7 +90,10 @@ public class BillingService {
             return collectReport(billingAuditEntities);
         } catch (Exception e) {
             log.error("Ошибка при попытке получить счета пользователя за период: {}", e.getMessage());
-            throw e;
+            throw new FetchingBillingAuditException(
+                    String.format(
+                            "Ошибка при попытке получить счета пользователя за период: %s",
+                            e.getMessage()));
         }
     }
 
@@ -96,7 +103,7 @@ public class BillingService {
      * @param user Пользователь
      * @return Список счетов пользователя за месяц
      */
-    @Cacheable(value = "caffeine", key = "#user")
+    @Cacheable(value = "billing-audit", key = "#user")
     public List<BillingAuditResponseDto> findBillingAuditRecordsByUserForLastMonth(String user) {
         try {
             LocalDateTime fromDateTime = LocalDate.now().atStartOfDay().minusDays(REPORT_CACHED_PERIOD_IN_DAYS);
@@ -107,7 +114,10 @@ public class BillingService {
             return collectReport(billingAuditEntities);
         } catch (Exception e) {
             log.error("Ошибка при попытке получить счета пользователя за последний месяц: {}", e.getMessage());
-            throw e;
+            throw new FetchingBillingAuditException(
+                    String.format(
+                            "Ошибка при попытке получить счета пользователя за последний месяц: %s",
+                            e.getMessage()));
         }
     }
 
@@ -119,12 +129,16 @@ public class BillingService {
         return BillingAuditMapper.INSTANCE.toBillingAuditResponseDtoList(billingAuditEntities);
     }
 
-    private BigDecimal calculateAmount(Operation operationType, Integer volumeUsed) {
-        BigDecimal pricePerSegment = operationType == Operation.LOAD_PARCELS
-                ? billingProperties.price().loading()
-                : billingProperties.price().unloading();
+    private BigDecimal calculateAmount(Operation operationType, Integer totalParcelsVolume) {
+        BigDecimal pricePerSegment = definePricePerSegmentByOperation(operationType);
+        return pricePerSegment.multiply(new BigDecimal(totalParcelsVolume));
+    }
 
-        return pricePerSegment.multiply(new BigDecimal(volumeUsed));
+    private BigDecimal definePricePerSegmentByOperation(Operation operationType) {
+        return switch (operationType) {
+            case LOAD_PARCELS -> billingProperties.price().loading();
+            case UNLOAD_PARCELS -> billingProperties.price().unloading();
+        };
     }
 
     private void saveBillingAudit(BillingAuditDto dto) {

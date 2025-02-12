@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import ru.hofftech.deliveryservice.parcelsloader.exception.TrucksOverflowException;
 import ru.hofftech.deliveryservice.parcelsloader.model.Parcel;
 import ru.hofftech.deliveryservice.parcelsloader.model.Truck;
-import ru.hofftech.deliveryservice.parcelsloader.model.dto.TruckOptionsDto;
+import ru.hofftech.deliveryservice.parcelsloader.model.dto.TruckOptions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,10 +28,10 @@ class SingleParcelLoadingAlgorithmTest {
                 new Character[] {'6', '6', '6'},
                 new Character[] {'6', '6', '6'}))));
 
-        var truckOptions = new ArrayList<TruckOptionsDto>() {{
-            add(new TruckOptionsDto(5,5));
-            add(new TruckOptionsDto(4,4));
-            add(new TruckOptionsDto(3,3));
+        var truckOptions = new ArrayList<TruckOptions>() {{
+            add(new TruckOptions(5,5));
+            add(new TruckOptions(4,4));
+            add(new TruckOptions(3,3));
         }};
 
         List<Truck> loadedTrucks = new SingleParcelLoadingAlgorithm().loadTrucks(parcels, truckOptions);
@@ -46,10 +46,10 @@ class SingleParcelLoadingAlgorithmTest {
                 new Character[] {'6', '6', '6'},
                 new Character[] {'6', '6', '6'}))));
 
-        var truckOptions = new ArrayList<TruckOptionsDto>() {{
-            add(new TruckOptionsDto(5,5));
-            add(new TruckOptionsDto(4,4));
-            add(new TruckOptionsDto(3,3));
+        var truckOptions = new ArrayList<TruckOptions>() {{
+            add(new TruckOptions(5,5));
+            add(new TruckOptions(4,4));
+            add(new TruckOptions(3,3));
         }};
 
         List<Truck> loadedTrucks = new SingleParcelLoadingAlgorithm().loadTrucks(parcels, truckOptions);
@@ -70,8 +70,8 @@ class SingleParcelLoadingAlgorithmTest {
                 new Character[] {'6', '6', '6'},
                 new Character[] {'6', '6', '6'}))));
 
-        var truckOptions = new ArrayList<TruckOptionsDto>() {{
-            add(new TruckOptionsDto(5,5));
+        var truckOptions = new ArrayList<TruckOptions>() {{
+            add(new TruckOptions(5,5));
         }};
 
         assertThatThrownBy(() -> new SingleParcelLoadingAlgorithm().loadTrucks(parcels, truckOptions))

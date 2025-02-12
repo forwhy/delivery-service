@@ -7,7 +7,8 @@ import ru.hofftech.deliveryservice.parcelsloader.mapper.LoadTrucksCommandMapper;
 import ru.hofftech.deliveryservice.parcelsloader.model.Parcel;
 import ru.hofftech.deliveryservice.parcelsloader.model.Truck;
 import ru.hofftech.deliveryservice.parcelsloader.model.dto.PlacedParcelDto;
-import ru.hofftech.deliveryservice.parcelsloader.model.dto.LoadTrucksCommandDto;
+import ru.hofftech.deliveryservice.parcelsloader.model.dto.LoadTrucksOptions;
+import ru.hofftech.deliveryservice.parcelsloader.model.dto.request.LoadTrucksCommandDto;
 import ru.hofftech.deliveryservice.parcelsloader.model.dto.response.DeliveryResponseDto;
 import ru.hofftech.deliveryservice.parcelsloader.service.PendingBillingService;
 import ru.hofftech.deliveryservice.parcelsloader.service.validation.LoadTrucksCommandDtoValidator;
@@ -20,16 +21,16 @@ public class LoadCommandProcessingService {
 
     private final LoadTrucksCommandDtoValidator loadTrucksCommandDtoValidator;
     private final LoadTrucksCommandMapper loadTrucksCommandMapper;
-    private final ParcelService parcelService;
+    private final ParcelProviderService parcelProviderService;
     private final ParcelsLoadingService parcelsLoadingService;
     private final PendingBillingService pendingBillingService;
     private final LoadingResultExporter loadingResultExporter;
 
-    public DeliveryResponseDto load(ru.hofftech.deliveryservice.parcelsloader.model.dto.request.LoadTrucksCommandDto commandDto) {
+    public DeliveryResponseDto load(LoadTrucksCommandDto commandDto) {
         try {
             loadTrucksCommandDtoValidator.validate(commandDto);
-            LoadTrucksCommandDto command = loadTrucksCommandMapper.toLoadTrucksCommand(commandDto);
-            List<Parcel> parcels = parcelService.extractParcels(command.inputMode(), command.parcelsSource());
+            LoadTrucksOptions command = loadTrucksCommandMapper.toLoadTrucksCommand(commandDto);
+            List<Parcel> parcels = parcelProviderService.extractParcels(command.inputMode(), command.parcelsSource());
             List<Truck> trucks = parcelsLoadingService.loadTrucks(
                     parcels,
                     command.truckOptionDtos(),
@@ -40,7 +41,6 @@ public class LoadCommandProcessingService {
                     Operation.LOAD_PARCELS,
                     trucks.size(),
                     extractParcels(trucks));
-
 
             return switch (command.outputMode()) {
                 case TEXT -> loadingResultExporter.exportParcelsPlacementResultAsText(

@@ -10,7 +10,7 @@ public record ParcelDto(String name,
                 .append(System.lineSeparator())
                 .append("form:")
                 .append(System.lineSeparator())
-                .append(form);
+                .append(form.replace("%n", System.lineSeparator()));
         return output.toString();
     }
 }

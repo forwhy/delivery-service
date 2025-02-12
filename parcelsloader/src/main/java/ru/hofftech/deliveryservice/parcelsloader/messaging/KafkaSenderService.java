@@ -1,4 +1,4 @@
-package ru.hofftech.deliveryservice.parcelsloader.service;
+package ru.hofftech.deliveryservice.parcelsloader.messaging;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

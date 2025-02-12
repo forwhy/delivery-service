@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import ru.hofftech.deliveryservice.parcelsloader.exception.InvalidAttemptToPutParcelIntoTruckException;
 import ru.hofftech.deliveryservice.parcelsloader.model.Parcel;
 import ru.hofftech.deliveryservice.parcelsloader.model.Truck;
-import ru.hofftech.deliveryservice.parcelsloader.model.dto.TruckOptionsDto;
+import ru.hofftech.deliveryservice.parcelsloader.model.dto.TruckOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +30,8 @@ class WideParcelFirstLoadingAlgorithmTest {
         parcels.add(new Parcel("Посылка Тип 1", '1', new ArrayList<>() {{ add(new Character[]{'1'}); }}));
         parcels.add(new Parcel("Посылка Тип 1", '1', new ArrayList<>() {{ add(new Character[]{'1'}); }}));
 
-        var truckOptions = new ArrayList<TruckOptionsDto>() {{
-            add(new TruckOptionsDto(6,6));
+        var truckOptions = new ArrayList<TruckOptions>() {{
+            add(new TruckOptions(6,6));
         }};
 
         List<Truck> loadedTrucks = new WideParcelFirstLoadingAlgorithm().loadTrucks(parcels, truckOptions);
@@ -56,8 +56,8 @@ class WideParcelFirstLoadingAlgorithmTest {
         parcels.add(new Parcel("Посылка Тип 1", '1', new ArrayList<>() {{ add(new Character[]{'1'}); }}));
         parcels.add(new Parcel("Посылка Тип 1", '1', new ArrayList<>() {{ add(new Character[]{'1'}); }}));
 
-        var truckOptions = new ArrayList<TruckOptionsDto>() {{
-            add(new TruckOptionsDto(6,6));
+        var truckOptions = new ArrayList<TruckOptions>() {{
+            add(new TruckOptions(6,6));
         }};
 
         List<Truck> loadedTrucks = new WideParcelFirstLoadingAlgorithm().loadTrucks(parcels, truckOptions);
@@ -83,8 +83,8 @@ class WideParcelFirstLoadingAlgorithmTest {
         parcels.add(new Parcel("Посылка Тип 1", '1', new ArrayList<>() {{ add(new Character[]{'1'}); }}));
         parcels.add(new Parcel("Посылка Тип 1", '1', new ArrayList<>() {{ add(new Character[]{'1'}); }}));
 
-        var truckOptions = new ArrayList<TruckOptionsDto>() {{
-            add(new TruckOptionsDto(6,6));
+        var truckOptions = new ArrayList<TruckOptions>() {{
+            add(new TruckOptions(6,6));
         }};
 
         assertThatThrownBy(() -> new WideParcelFirstLoadingAlgorithm().loadTrucks(parcels, truckOptions))
