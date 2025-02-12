@@ -8,6 +8,7 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 import ru.hofftech.deliveryservice.telegramclient.controller.TelegramController;
+import ru.hofftech.deliveryservice.telegramclient.service.BillingClient;
 import ru.hofftech.deliveryservice.telegramclient.service.CommandProcessorService;
 import ru.hofftech.deliveryservice.telegramclient.service.ParcelsLoaderClient;
 import ru.hofftech.deliveryservice.telegramclient.service.TelegramService;
@@ -24,6 +25,9 @@ public class ApplicationConfig {
 
     @Value("${services.parcels-loader.url}")
     private String parcelsLoaderUrl;
+
+    @Value("${services.billing.url}")
+    private String billingUrl;
 
     @Bean
     public TelegramController telegramController(TelegramService telegramService) {
@@ -49,5 +53,16 @@ public class ApplicationConfig {
         var adapter = RestClientAdapter.create(client);
         var httpServiceProxyFactory = HttpServiceProxyFactory.builderFor(adapter).build();
         return httpServiceProxyFactory.createClient(ParcelsLoaderClient.class);
+    }
+
+    @Bean
+    public BillingClient billingClient() {
+        var client = RestClient.builder()
+                .baseUrl(billingUrl)
+                .build();
+
+        var adapter = RestClientAdapter.create(client);
+        var httpServiceProxyFactory = HttpServiceProxyFactory.builderFor(adapter).build();
+        return httpServiceProxyFactory.createClient(BillingClient.class);
     }
 }

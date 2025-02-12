@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
-import ru.hofftech.deliveryservice.consoleclient.model.dto.DeliveryResponseDto;
 import ru.hofftech.deliveryservice.consoleclient.model.dto.LoadTrucksCommandDto;
 import ru.hofftech.deliveryservice.consoleclient.model.dto.UnloadTrucksCommandDto;
 import ru.hofftech.deliveryservice.consoleclient.service.ParcelsLoaderClient;

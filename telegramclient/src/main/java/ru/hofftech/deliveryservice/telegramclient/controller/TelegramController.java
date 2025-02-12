@@ -8,6 +8,5 @@ public class TelegramController {
 
     public TelegramController(TelegramService telegramService) {
         this.telegramService = telegramService;
-        this.telegramService.init();
     }
 }

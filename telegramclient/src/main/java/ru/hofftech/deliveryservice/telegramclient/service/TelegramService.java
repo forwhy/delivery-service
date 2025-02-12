@@ -1,6 +1,5 @@
 package ru.hofftech.deliveryservice.telegramclient.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -46,21 +45,9 @@ public class TelegramService extends TelegramLongPollingBot {
             log.info("Получено сообщение {}", messageText);
             var chatId = update.getMessage().getChatId();
 
-            switch (messageText){
-                case "/start":
-                    sendStartMessage(update.getMessage().getChat().getFirstName(), chatId);
-                    break;
-                default:
-                    String result = commandProcessorService.processCommandText(update.getMessage().getText());
-                    sendMessage(result, chatId);
-            }
+            String result = commandProcessorService.processCommandText(update.getMessage().getText());
+            sendMessage(result, chatId);
         }
-    }
-
-    private void sendStartMessage(String name, long chatId) {
-        sendMessage(
-                String.format("Привет, %s. Для получения справки используйте команду /help.", name),
-                chatId);
     }
 
     private void sendMessage(String textToSend, long chatId) {

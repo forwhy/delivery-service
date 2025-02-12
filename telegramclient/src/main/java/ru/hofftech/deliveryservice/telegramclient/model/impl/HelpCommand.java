@@ -1,8 +1,12 @@
-package ru.hofftech.deliveryservice.telegramclient.constants;
+package ru.hofftech.deliveryservice.telegramclient.model.impl;
 
-public class Constant {
+import org.springframework.stereotype.Component;
+import ru.hofftech.deliveryservice.telegramclient.model.Command;
 
-    public static final String HELP_TEXT = """
+@Component
+public class HelpCommand implements Command {
+
+    private static final String HELP_TEXT = """
         Привет! На связи служба работы с посылками.
             
             Вот описание доступных команд:
@@ -48,4 +52,9 @@ public class Constant {
                  Команда отображает квитанции пользователя по его имени
                  Пример: /billing --u "почта@mail.ru"
         """;
+
+    @Override
+    public String execute(String commandText) {
+        return HELP_TEXT;
+    }
 }

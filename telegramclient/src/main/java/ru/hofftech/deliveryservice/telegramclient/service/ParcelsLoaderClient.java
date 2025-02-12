@@ -6,34 +6,33 @@ import org.springframework.web.service.annotation.DeleteExchange;
 import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.PostExchange;
 import org.springframework.web.service.annotation.PutExchange;
-import ru.hofftech.deliveryservice.telegramclient.model.record.CreateParcelCommand;
-import ru.hofftech.deliveryservice.telegramclient.model.record.LoadTrucksCommand;
-import ru.hofftech.deliveryservice.telegramclient.model.record.UnloadTrucksCommand;
+import ru.hofftech.deliveryservice.telegramclient.model.dto.*;
+import ru.hofftech.deliveryservice.telegramclient.model.dto.response.DeliveryResponseDto;
+import ru.hofftech.deliveryservice.telegramclient.model.dto.response.ParcelDto;
+
+import java.util.List;
 
 public interface ParcelsLoaderClient {
 
     @PostExchange("/api/v1/parcels")
-    String createParcel(@RequestBody CreateParcelCommand command);
+    ParcelDto createParcel(@RequestBody CreateParcelCommandDto command);
 
     @GetExchange("/api/v1/parcels/{parcelId}")
-    String findParcel(@PathVariable String parcelId);
+    ParcelDto findParcel(@PathVariable String parcelId);
 
     @GetExchange("/api/v1/parcels")
-    String findAll();
+    List<ParcelDto> findAll();
 
     @PutExchange("/api/v1/parcels/{parcelId}")
-    String updateParcel(@PathVariable String parcelId,
-                        @RequestBody CreateParcelCommand command);
+    ParcelDto updateParcel(@PathVariable String parcelId,
+                           @RequestBody Parcel command);
 
     @DeleteExchange("/api/v1/parcels/{parcelId}")
-    String deleteParcel(@PathVariable String parcelId);
+    void deleteParcel(@PathVariable String parcelId);
 
-    @PostExchange("/api/v1/delivery/loading")
-    String load(@RequestBody LoadTrucksCommand command);
+    @PostExchange("/api/v1/delivery/load")
+    DeliveryResponseDto load(@RequestBody LoadTrucksCommandDto command);
 
-    @PostExchange("/api/v1/delivery/unloading")
-    String unload(@RequestBody UnloadTrucksCommand command);
-
-    @GetExchange("/api/v1/billing/{user}")
-    String findByUser(@PathVariable String user);
+    @PostExchange("/api/v1/delivery/unload")
+    DeliveryResponseDto unload(@RequestBody UnloadTrucksCommandDto command);
 }

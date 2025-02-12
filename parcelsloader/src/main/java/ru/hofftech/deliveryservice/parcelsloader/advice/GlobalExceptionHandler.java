@@ -1,12 +1,11 @@
-package ru.hofftech.deliveryservice.billing.advice;
+package ru.hofftech.deliveryservice.parcelsloader.advice;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import ru.hofftech.deliveryservice.billing.exception.FetchingBillingAuditException;
-import ru.hofftech.deliveryservice.billing.model.dto.ApiError;
+import ru.hofftech.deliveryservice.parcelsloader.model.dto.ApiError;
 
 import java.util.List;
 
@@ -22,15 +21,6 @@ public class GlobalExceptionHandler {
                 .errors(List.of(e.getMessage()))
                 .build();
 
-        return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @ExceptionHandler(FetchingBillingAuditException.class)
-    public ResponseEntity<ApiError> handleException(FetchingBillingAuditException e) {
-        ApiError apiError = ApiError.builder()
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .errors(List.of(e.getMessage()))
-                .build();
         return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

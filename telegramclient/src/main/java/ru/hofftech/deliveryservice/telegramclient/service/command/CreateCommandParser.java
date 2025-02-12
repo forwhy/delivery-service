@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.hofftech.deliveryservice.telegramclient.exception.InvalidCommandException;
-import ru.hofftech.deliveryservice.telegramclient.model.record.CreateParcelCommand;
+import ru.hofftech.deliveryservice.telegramclient.model.dto.CreateParcelCommandDto;
 import ru.hofftech.deliveryservice.telegramclient.service.validation.CreateParcelCommandValidator;
 
 import java.util.regex.Matcher;
@@ -22,7 +22,7 @@ public class CreateCommandParser {
     private static final Integer FIRST_SYMBOL_INDEX = 0;
     private final CreateParcelCommandValidator createParcelCommandValidator;
 
-    public CreateParcelCommand parse(String commandText) throws InvalidCommandException {
+    public CreateParcelCommandDto parse(String commandText) throws InvalidCommandException {
         Pattern pattern = Pattern.compile(COMMAND_PATTERN);
         Matcher matcher = pattern.matcher(commandText);
 
@@ -35,7 +35,7 @@ public class CreateCommandParser {
         String symbolString = matcher.group(SYMBOL_INDEX);
         createParcelCommandValidator.validateCommandArguments(name, form, symbolString);
 
-        return new CreateParcelCommand(
+        return new CreateParcelCommandDto(
                 name,
                 form,
                 symbolString.charAt(FIRST_SYMBOL_INDEX));

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.hofftech.deliveryservice.telegramclient.exception.InvalidCommandException;
-import ru.hofftech.deliveryservice.telegramclient.model.record.LoadTrucksCommand;
+import ru.hofftech.deliveryservice.telegramclient.model.dto.LoadTrucksCommandDto;
 import ru.hofftech.deliveryservice.telegramclient.service.validation.LoadTrucksCommandValidator;
 
 import java.util.regex.Matcher;
@@ -33,7 +33,7 @@ public class LoadCommandParser {
     private static final Integer OUT_FILENAME_TARGET_INDEX = 7;
     private final LoadTrucksCommandValidator loadTrucksCommandValidator;
 
-    public LoadTrucksCommand parse(String commandText) throws InvalidCommandException {
+    public LoadTrucksCommandDto parse(String commandText) throws InvalidCommandException {
         Pattern pattern = Pattern.compile(COMMAND_PATTERN);
         Matcher matcher = pattern.matcher(commandText);
 
@@ -57,7 +57,7 @@ public class LoadCommandParser {
                                                             out,
                                                             outFilename);
 
-        return new LoadTrucksCommand(
+        return new LoadTrucksCommandDto(
                 user,
                 parcelsText,
                 parcelsFile,

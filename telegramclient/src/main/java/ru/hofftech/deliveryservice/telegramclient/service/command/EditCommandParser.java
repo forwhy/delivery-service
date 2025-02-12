@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.hofftech.deliveryservice.telegramclient.exception.InvalidCommandException;
-import ru.hofftech.deliveryservice.telegramclient.model.record.CreateParcelCommand;
-import ru.hofftech.deliveryservice.telegramclient.model.record.EditParcelCommand;
+import ru.hofftech.deliveryservice.telegramclient.model.dto.EditParcelCommandDto;
+import ru.hofftech.deliveryservice.telegramclient.model.dto.Parcel;
 import ru.hofftech.deliveryservice.telegramclient.service.validation.EditParcelCommandValidator;
 
 import java.util.regex.Matcher;
@@ -25,7 +25,7 @@ public class EditCommandParser {
     private static final Integer FIRST_SYMBOL_INDEX = 0;
     private final EditParcelCommandValidator editParcelCommandValidator;
 
-    public EditParcelCommand parse(String commandText) throws InvalidCommandException {
+    public EditParcelCommandDto parse(String commandText) throws InvalidCommandException {
         Pattern pattern = Pattern.compile(COMMAND_PATTERN);
         Matcher matcher = pattern.matcher(commandText);
 
@@ -39,9 +39,9 @@ public class EditCommandParser {
                 matcher.group(FORM_INDEX),
                 matcher.group(SYMBOL_INDEX));
 
-        return new EditParcelCommand(
+        return new EditParcelCommandDto(
                 matcher.group(ID_INDEX),
-                new CreateParcelCommand(matcher.group(NAME_INDEX),
+                new Parcel(matcher.group(NAME_INDEX),
                                         matcher.group(FORM_INDEX),
                                         matcher.group(SYMBOL_INDEX).charAt(FIRST_SYMBOL_INDEX)));
     }

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.hofftech.deliveryservice.telegramclient.exception.InvalidCommandException;
-import ru.hofftech.deliveryservice.telegramclient.model.record.UnloadTrucksCommand;
+import ru.hofftech.deliveryservice.telegramclient.model.dto.UnloadTrucksCommandDto;
 import ru.hofftech.deliveryservice.telegramclient.service.validation.UnloadTrucksCommandValidator;
 
 import java.util.regex.Matcher;
@@ -24,7 +24,7 @@ public class UnloadCommandParser {
     private static final Integer TARGET_FILE_NAME_INDEX = 3;
     private final UnloadTrucksCommandValidator unloadTrucksCommandValidator;
 
-    public UnloadTrucksCommand parse(String commandText) throws InvalidCommandException {
+    public UnloadTrucksCommandDto parse(String commandText) throws InvalidCommandException {
         Pattern pattern = Pattern.compile(COMMAND_PATTERN);
         Matcher matcher = pattern.matcher(commandText);
 
@@ -39,6 +39,6 @@ public class UnloadCommandParser {
 
         unloadTrucksCommandValidator.validateCommandArguments(user, inFile, outFile);
 
-        return new UnloadTrucksCommand(user, inFile, outFile, withCount);
+        return new UnloadTrucksCommandDto(user, inFile, outFile, withCount);
     }
 }
