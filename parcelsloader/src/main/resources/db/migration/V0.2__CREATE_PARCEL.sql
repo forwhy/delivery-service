@@ -5,6 +5,8 @@ CREATE TABLE parcel (
      form       VARCHAR(1000)
 );
 
+CREATE UNIQUE INDEX parcel_name_idx ON prcls.parcel (name);
+
 INSERT INTO parcel (name, symbol, form)
 VALUES ('Посылка Тип 1', '1', '1'),
        ('Посылка Тип 2', '2', '22'),

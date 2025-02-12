@@ -1,0 +1,39 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/billing_db?currentSchema=billing
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    open-in-view: false
+  kafka:
+    bootstrap-servers: localhost:29092
+    consumer:
+      group-id: billing_group_v0
+
+kafka:
+  topic: billing.audit.v0
+
+server:
+  port: 8083
+
+swagger:
+  url:
+    path: /
+
+springdoc:
+  swagger-ui:
+    enabled: true
+  api-docs:
+    path: ${swagger.url.path}swagger/v3/api-docs
+
+billing:
+  price:
+    loading: 80
+    unloading: 50
+
+cache:
+  name: caffeine
+  expire-after-write: 30
+  maximum-size: 1000
