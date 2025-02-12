@@ -1,5 +1,5 @@
 object Version {
-    const val SPRING_BOOT = "3.1.4"
+    const val SPRING_BOOT = "3.4.0"
     const val SLF4J = "2.0.0"
     const val LOGBACK = "1.4.5"
     const val JACKSON = "2.15.2"
@@ -22,9 +22,10 @@ object Version {
     const val JAXB_RUNTIME = "2.3.1"
     const val SPRING_SHELL = "3.4.0"
     const val GSON_BUILDER = "2.11.0"
+    const val SPRING_KAFKA = "3.0.10"
 
     object Spring {
-        const val CLOUD = "2023.0.3"
+        const val CLOUD = "4.2.0"
         const val OPEN_API = "2.6.0"
     }
 
@@ -49,32 +50,44 @@ repositories {
 
 dependencies {
     implementation("org.springframework.shell:spring-shell-starter")
+
     implementation("org.slf4j:slf4j-api:${Version.SLF4J}")
+
     implementation("ch.qos.logback:logback-classic:${Version.LOGBACK}")
+
     implementation("com.fasterxml.jackson.core:jackson-databind:${Version.JACKSON}")
     implementation("com.fasterxml.jackson.core:jackson-annotations:${Version.JACKSON}")
     implementation("com.fasterxml.jackson.core:jackson-core:${Version.JACKSON}")
-    implementation("com.google.code.gson:gson:${Version.GSON_BUILDER}")
-    implementation("net.bytebuddy:byte-buddy:${Version.BYTE_BUDDY}")
-    implementation("org.springframework.boot:spring-boot-starter:${Version.SPRING_BOOT}")
-    implementation("org.ow2.asm:asm:${Version.ASM}")
-    implementation("org.telegram:telegrambots:${Version.TELEGRAM_BOTS}")
-    implementation("com.beust:jcommander:${Version.JCOMMANDER}")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${Version.JACKSON_DATATYPE_JSR310}")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${Version.SPRING_DOC}")
-    implementation("jakarta.persistence:jakarta.persistence-api:${Version.JAKARTA_PERSISTENCE_API}")
+
+    implementation("com.google.code.gson:gson:${Version.GSON_BUILDER}")
+
+    implementation("net.bytebuddy:byte-buddy:${Version.BYTE_BUDDY}")
+
+    implementation("org.springframework.boot:spring-boot-starter:${Version.SPRING_BOOT}")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:${Version.SPRING_BOOT_STARTER_DATA_JPA}")
-    implementation("org.postgresql:postgresql:${Version.POSTGRESQL}")
     implementation("org.springframework.boot:spring-boot-starter-web:${Version.SPRING_BOOT}")
+    implementation("org.springframework.kafka:spring-kafka:${Version.SPRING_KAFKA}")
+
+    implementation("org.ow2.asm:asm:${Version.ASM}")
+
+    implementation("com.beust:jcommander:${Version.JCOMMANDER}")
+
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${Version.SPRING_DOC}")
+
+    implementation("jakarta.persistence:jakarta.persistence-api:${Version.JAKARTA_PERSISTENCE_API}")
+
+    implementation("org.postgresql:postgresql:${Version.POSTGRESQL}")
+    implementation("org.flywaydb:flyway-core:${Version.FLYWAY}")
+
     implementation("org.mapstruct:mapstruct:${Version.MAPSTRUCT}")
-    annotationProcessor("org.projectlombok:lombok-mapstruct-binding:${Version.Lombok.MAP_STRUCT_BINDING}")
     annotationProcessor("org.mapstruct:mapstruct-processor:${Version.MAPSTRUCT}")
 
+    annotationProcessor("org.projectlombok:lombok-mapstruct-binding:${Version.Lombok.MAP_STRUCT_BINDING}")
     compileOnly("org.projectlombok:lombok:${Version.LOMBOK}")
     annotationProcessor("org.projectlombok:lombok:${Version.LOMBOK}")
-    implementation("org.flywaydb:flyway-core:${Version.FLYWAY}")
-    testImplementation("org.springframework.boot:spring-boot-starter-test:${Version.SPRING_BOOT}")
 
+    testImplementation("org.springframework.boot:spring-boot-starter-test:${Version.SPRING_BOOT}")
     testCompileOnly("org.projectlombok:lombok:${Version.LOMBOK}")
     testAnnotationProcessor("org.projectlombok:lombok:${Version.LOMBOK}")
     testImplementation(platform("org.junit:junit-bom:${Version.JUNIT}"))

@@ -1,12 +1,20 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/delivery_db?currentSchema=prcls
-    username: postgres
-    password: postgres
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
     open-in-view: false
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    acks: all
+    retries: 3
+
+topics:
+  billing:
+    audit: billing.audit.v0
 
 server:
   port: 8080
@@ -19,3 +27,7 @@ billing:
 parcels:
   paging:
     default-limit: 20
+
+scheduler:
+  billing:
+    fixed-rate: 10000

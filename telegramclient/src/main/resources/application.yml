@@ -9,3 +9,5 @@ server:
 services:
   parcels-loader:
     url: http://localhost:8080
+  billing:
+    url: http://localhost:8083
