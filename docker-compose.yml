@@ -1,5 +1,8 @@
+---
 services:
-  postgres:
+
+# DB
+  delivery_db:
     image: postgres
     container_name: delivery_db_container
     ports:
@@ -11,21 +14,38 @@ services:
     networks:
       - spring-rest-client
 
+
+  billing_db:
+    image: postgres
+    container_name: billing_db_container
+    ports:
+      - 5433:5433
+    environment:
+      - POSTGRES_DB=billing_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - spring-rest-client
+
+# services
   billing:
     build:
       context: ./billing
-      dockerfile: Dockerfile
     container_name: billing
+    restart: always
     environment:
       BILLING_LOADPRICING: 50
       BILLING_UNLOADPRICING: 80
       SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5433/billing_db?currentSchema=billing
     env_file:
-        - billing/cred.env
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "50m"
+      - billing/cred.env
+    ports:
+      - 8083:8083
+    networks:
+      - spring-rest-client
+    depends_on:
+      - billing_db
+
 
   parcelsloader:
     build:
@@ -35,42 +55,45 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/delivery_db?currentSchema=prcls
     env_file:
-        - parcelsloader/cred.env
+      - parcelsloader/cred.env
     ports:
-      - "8080:8080"
+      - 8080:8080
     networks:
       - spring-rest-client
     depends_on:
-      - postgres
+      - delivery_db
+
 
   consoleclient:
     build:
       context: ./consoleclient
     container_name: consoleclient
     ports:
-      - "8081:8081"
+      - 8081:8081
     environment:
-      SERVICES_PARCELSLOADER_URL: "http://parcelsloader:8080"
+      SERVICES_PARCELSLOADER_URL: http://parcelsloader:8080
     networks:
       - spring-rest-client
     depends_on:
       - parcelsloader
+
 
   telegramclient:
     build:
       context: ./telegramclient
     container_name: telegramclient
     environment:
-      SERVICES_PARCELSLOADER_URL: "http://parcelsloader:8080"
+      SERVICES_PARCELSLOADER_URL: http://parcelsloader:8080
     env_file:
       - telegramclient/cred.env
     ports:
-      - "8082:8082"
+      - 8082:8082
     networks:
       - spring-rest-client
     depends_on:
       - parcelsloader
 
+# kafka
   zookeeper:
     image: confluentinc/cp-zookeeper:7.4.4
     environment:
@@ -78,6 +101,8 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - 22181:2181
+
+
   kafka:
     image: confluentinc/cp-kafka:7.4.4
     depends_on:
@@ -91,13 +116,16 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+
   kafka-ui:
     image: provectuslabs/kafka-ui:v0.7.2
     ports:
-      - "8084:8080"
+      - 8084:8080
     environment:
       KAFKA_CLUSTERS_0_NAME: Kafka
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+
 
 networks:
   spring-rest-client:
