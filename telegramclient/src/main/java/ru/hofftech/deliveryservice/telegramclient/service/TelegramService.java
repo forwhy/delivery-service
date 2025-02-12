@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+import ru.hofftech.deliveryservice.telegramclient.exception.TelegramConnectException;
 
 @Slf4j
 public class TelegramService extends TelegramLongPollingBot {
@@ -58,6 +59,8 @@ public class TelegramService extends TelegramLongPollingBot {
             execute(message);
         } catch (TelegramApiException e) {
             log.error("Ошибка при отправке сообщения в чат телеграм.");
+            throw new TelegramConnectException(
+                    String.format("Ошибка при отправке сообщения в чат телеграм: %s", e.getMessage()));
         }
     }
 }
