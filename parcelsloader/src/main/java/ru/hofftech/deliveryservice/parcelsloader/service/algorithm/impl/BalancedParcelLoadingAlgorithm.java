@@ -2,6 +2,7 @@ package ru.hofftech.deliveryservice.parcelsloader.service.algorithm.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import ru.hofftech.deliveryservice.parcelsloader.exception.TrucksOverflowException;
 import ru.hofftech.deliveryservice.parcelsloader.model.constants.DefaultValues;
 import ru.hofftech.deliveryservice.parcelsloader.model.MatrixPosition;
 import ru.hofftech.deliveryservice.parcelsloader.model.Parcel;
@@ -36,7 +37,6 @@ public class BalancedParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
 
         for (var truck : trucks) {
             if (isParcelPutIntoTruck(parcel, truck)) {
-
                 return;
             } else {
                 log.warn(
@@ -45,6 +45,9 @@ public class BalancedParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
                         truck.getTruckType());
             }
         }
+
+        throw new TrucksOverflowException(
+                String.format("Посылка %s не помещается ни в один из предоставленных грузовиков", parcel.getName()));
     }
 
     private List<Truck> removeUnusedTrucks(List<Truck> trucks) {

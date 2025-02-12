@@ -37,9 +37,12 @@ public class SingleParcelLoadingAlgorithm implements ParcelLoadingAlgorithm {
         return loadedTrucks;
     }
 
-    private void validateTrucksCount(Integer trucksCount, Integer trucksNeededCount) {
-        if (trucksNeededCount > trucksCount) {
-            throw new TrucksOverflowException(trucksNeededCount, trucksCount);
+    private void validateTrucksCount(Integer trucksCount, Integer parcelsCount) {
+        if (parcelsCount > trucksCount) {
+            throw new TrucksOverflowException(
+                    String.format(
+                            "Недостаточное количество грузовиков для алгоритма: предоставлено %d грузовиков, но %d посылок",
+                            trucksCount, parcelsCount));
         }
     }
 
